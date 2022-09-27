@@ -1,0 +1,5 @@
+﻿<form method="post" enctype="multipart/form-data" asp-controller="Images" asp-action="Upload" >
+	<input type="file" multiple name="images" class="form-control" />
+	@Html.ValidationSummary("")
+	<input type="submit" />
+</form>

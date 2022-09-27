@@ -1,13 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using DFT_MVC.Data;
+using Microsoft.AspNetCore.Hosting;
+using DFT_MVC.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    serverOptions.Limits.MaxRequestBodySize = long.MaxValue;
+//});
+
 
 builder.Services.AddDbContext<DFT_MVC_Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DFT_MVC_Context") ?? throw new InvalidOperationException("Connection string 'DFT_MVC_Context' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IImageService, ImageService>();
 
 var app = builder.Build();
 
