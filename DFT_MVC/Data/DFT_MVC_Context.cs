@@ -16,6 +16,6 @@ namespace DFT_MVC.Data
 
         public DbSet<Kategorie> Kategorie { get; set; } = default!;
 
-        //public DbSet<Image>? Image { get; set; }
+        public DbSet<ImageData> ImageData { get; set; }
     }
 }

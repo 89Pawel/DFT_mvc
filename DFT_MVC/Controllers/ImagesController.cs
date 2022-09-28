@@ -20,7 +20,7 @@ namespace DFT_MVC.Controllers
 
         [HttpPost]
         [RequestSizeLimit(100 * 1024 * 1024)]
-        public async Task<IActionResult> Upload(IFormFile[]? images)
+        public async Task<IActionResult> Upload(IFormFile[] images)
         {
             if (images != null)
             {
@@ -43,9 +43,16 @@ namespace DFT_MVC.Controllers
             }
 
             ModelState.AddModelError("images", "za dużo! maks 100mb");
-            return RedirectToAction();
+            return View();
 
         }
+
+        public async Task<IActionResult> All() => View(await _imageService.GetAllImages());
+
+        public async Task<IActionResult> Fullscreen(string id) => File(await _imageService.GetFullscreen(id), "image/jpeg");
+        public async Task<IActionResult> ThumbnailBig(string id) => File(await _imageService.GetThumbnailBig(id), "image/jpeg");
+        public async Task<IActionResult> ThumbnailSmall(string id) => File(await _imageService.GetThumbnailSmall(id), "image/jpeg");
+
 
         public IActionResult Done() => View();
 

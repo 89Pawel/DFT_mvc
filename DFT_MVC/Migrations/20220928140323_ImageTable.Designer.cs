@@ -4,6 +4,7 @@ using DFT_MVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DFT_MVC.Migrations
 {
     [DbContext(typeof(DFT_MVC_Context))]
-    partial class DFT_MVC_ContextModelSnapshot : ModelSnapshot
+    [Migration("20220928140323_ImageTable")]
+    partial class ImageTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,14 +26,14 @@ namespace DFT_MVC.Migrations
 
             modelBuilder.Entity("DFT_MVC.Data.ImageData", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("FullscreenContent")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int>("KategorieId")
+                    b.Property<int?>("KategorieId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("OriginalContent")
@@ -51,10 +53,9 @@ namespace DFT_MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("KategorieId")
-                        .IsUnique();
+                    b.HasIndex("KategorieId");
 
-                    b.ToTable("ImageData");
+                    b.ToTable("ImagData");
                 });
 
             modelBuilder.Entity("DFT_MVC.Models.Kategorie", b =>
@@ -80,17 +81,10 @@ namespace DFT_MVC.Migrations
             modelBuilder.Entity("DFT_MVC.Data.ImageData", b =>
                 {
                     b.HasOne("DFT_MVC.Models.Kategorie", "Kategorie")
-                        .WithOne("ImageData")
-                        .HasForeignKey("DFT_MVC.Data.ImageData", "KategorieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("KategorieId");
 
                     b.Navigation("Kategorie");
-                });
-
-            modelBuilder.Entity("DFT_MVC.Models.Kategorie", b =>
-                {
-                    b.Navigation("ImageData");
                 });
 #pragma warning restore 612, 618
         }

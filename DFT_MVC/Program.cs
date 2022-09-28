@@ -40,4 +40,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.Services.CreateScope().ServiceProvider.GetRequiredService<DFT_MVC_Context>().Database.Migrate();
+
 app.Run();
