@@ -1,4 +1,5 @@
-﻿using DFT_MVC.Models;
+﻿using DFT_MVC.Data;
+using DFT_MVC.Models;
 using DFT_MVC.Services;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,11 @@ namespace DFT_MVC.Controllers
     public class ImagesController : Controller
     {
         private readonly IImageService _imageService;
-
-        public ImagesController(IImageService imageService)
+        private readonly DFT_MVC_Context _context;
+        public ImagesController(IImageService imageService, DFT_MVC_Context context)
         {
             _imageService = imageService;
+            _context = context;
         }
 
         [HttpGet]
@@ -36,7 +38,7 @@ namespace DFT_MVC.Controllers
                         Name = i.FileName,
                         Type = i.ContentType,
                         Content = i.OpenReadStream()
-                    }));
+                    }), null);
 
                     return RedirectToAction(nameof(this.Done));
                 }

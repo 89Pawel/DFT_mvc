@@ -4,7 +4,7 @@ namespace DFT_MVC.Services
 {
     public interface IImageService
     {
-        Task Process(IEnumerable<ImageInput> images);
+        Task Process(IEnumerable<ImageInput> images, int? id);
 
         Task<List<string>> GetAllImages();
         Task<Stream> GetFullscreen(string id);

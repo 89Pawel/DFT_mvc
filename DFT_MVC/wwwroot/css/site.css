@@ -16,3 +16,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+div.image::before {
+    content: url(https://a.allegroimg.com/s1024/0c41d9/2f5916ad479f909b56fb3b9ea585);
+}
+

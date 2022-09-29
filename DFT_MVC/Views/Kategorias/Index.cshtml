@@ -1,0 +1,63 @@
+﻿@using DFT_MVC.Data
+@model DFT_MVC.ViewModel.KategorieViewModel
+@*@model IEnumerable<DFT_MVC.Models.Kategoria>*@
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Nazwa</th>
+			<th>Zdjęcie</th>
+			<th>Data utworzenia</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<style>
+
+
+			img {
+				width: 100px;
+				height: 60px;
+				object-fit: cover;
+			}
+
+		</style>
+		@foreach (var item in Model.Kategorie)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Name)
+				</td>
+				<td>
+					@foreach (var image in Model.Images)
+					{
+						if (image.KategoriaId == item.Id)
+						{
+							<img src="/Images/ThumbnailSmall/@image.Id">
+
+
+						}
+
+					}
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CreationDate)
+				</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

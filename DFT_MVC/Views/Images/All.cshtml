@@ -3,6 +3,20 @@
 @foreach (var image in Model)
 {
 	<a href="/Images/Fullscreen/@image">
-		<img src="/Images/ThumbnailBig/@image">
+		<style>
+
+
+			img {
+				width: 150px;
+				height: 150px;
+				object-fit: cover;
+				
+			}
+
+		</style>
+		<div >
+			<img src="/Images/ThumbnailSmall/@image" >
+
+		</div>
 	</a>
 }

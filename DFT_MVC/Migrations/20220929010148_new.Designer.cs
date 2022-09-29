@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DFT_MVC.Migrations
 {
     [DbContext(typeof(DFT_MVC_Context))]
-    [Migration("20220928143238_ImageTable2")]
-    partial class ImageTable2
+    [Migration("20220929010148_new")]
+    partial class @new
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,14 +26,14 @@ namespace DFT_MVC.Migrations
 
             modelBuilder.Entity("DFT_MVC.Data.ImageData", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("FullscreenContent")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("KategorieId")
+                    b.Property<int?>("KategoriaId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("OriginalContent")
@@ -53,14 +53,14 @@ namespace DFT_MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("KategorieId")
+                    b.HasIndex("KategoriaId")
                         .IsUnique()
-                        .HasFilter("[KategorieId] IS NOT NULL");
+                        .HasFilter("[KategoriaId] IS NOT NULL");
 
-                    b.ToTable("ImagData");
+                    b.ToTable("ImageData");
                 });
 
-            modelBuilder.Entity("DFT_MVC.Models.Kategorie", b =>
+            modelBuilder.Entity("DFT_MVC.Models.Kategoria", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,19 +77,19 @@ namespace DFT_MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Kategorie");
+                    b.ToTable("Kategoria");
                 });
 
             modelBuilder.Entity("DFT_MVC.Data.ImageData", b =>
                 {
-                    b.HasOne("DFT_MVC.Models.Kategorie", "Kategorie")
+                    b.HasOne("DFT_MVC.Models.Kategoria", "Kategoria")
                         .WithOne("ImageData")
-                        .HasForeignKey("DFT_MVC.Data.ImageData", "KategorieId");
+                        .HasForeignKey("DFT_MVC.Data.ImageData", "KategoriaId");
 
-                    b.Navigation("Kategorie");
+                    b.Navigation("Kategoria");
                 });
 
-            modelBuilder.Entity("DFT_MVC.Models.Kategorie", b =>
+            modelBuilder.Entity("DFT_MVC.Models.Kategoria", b =>
                 {
                     b.Navigation("ImageData");
                 });

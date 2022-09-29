@@ -1,7 +1,6 @@
 ﻿namespace DFT_MVC.Services
 {
     using DFT_MVC.Data;
-    using DFT_MVC.Migrations;
     using DFT_MVC.Models;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Data.SqlClient;
@@ -20,9 +19,9 @@
         private readonly DFT_MVC_Context dbContext;
         private readonly IServiceScopeFactory serviceScopeFactory;
 
-        private readonly string fullscreen = "Fullscreen";
-        private readonly string thumbnailBig = "ThumbnailBig";
-        private readonly string thumbnailSmall = "ThumbnailSmall";
+        private readonly string fullscreen = "FullscreenContent";
+        private readonly string thumbnailBig = "ThumbnailBigContent";
+        private readonly string thumbnailSmall = "ThumbnailSmallContent";
 
 
         public ImageService(IServiceScopeFactory serviceScopeFactory, DFT_MVC_Context dbContext)
@@ -39,7 +38,7 @@
 
         public Task<Stream> GetThumbnailSmall(string id) => GetImageData(id, thumbnailSmall);
 
-        public async Task Process(IEnumerable<ImageInput> images)
+        public async Task Process(IEnumerable<ImageInput> images, int? id)
         {
             var tasks = images
                 .Select(image => Task.Run(async () =>
@@ -61,6 +60,7 @@
                         FullscreenContent = fullscreen,
                         ThumbnailBigContent = thumbnailBig,
                         ThumbnailSmallContent = thumbnailSmall,
+                        KategoriaId = (int)id
                     });
 
                     await database.SaveChangesAsync();

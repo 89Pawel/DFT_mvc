@@ -14,8 +14,16 @@ namespace DFT_MVC.Data
         {
         }
 
-        public DbSet<Kategorie> Kategorie { get; set; } = default!;
+        public DbSet<Kategoria> Kategoria { get; set; } = default!;
 
         public DbSet<ImageData> ImageData { get; set; }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Kategoria>()
+        //        .HasOne(i => i.ImageData)
+        //        .WithOne(a => a.Kategoria)
+        //        .HasForeignKey<ImageData>(i => i.KategoriaId);
+        //}
     }
 }

@@ -19,7 +19,7 @@ namespace DFT_MVC.Data
         [Display(Name = "Zdjęcie")]
         public byte[] ThumbnailSmallContent { get; set; }
 
-        public int KategorieId { get; set; }
-        public Kategorie Kategorie { get; set; }
+        public int KategoriaId { get; set; }
+        public Kategoria Kategoria { get; set; }
     }
 }

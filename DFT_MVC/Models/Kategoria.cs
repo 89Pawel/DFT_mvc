@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DFT_MVC.Models
 {
-    public class Kategorie
+    public class Kategoria
     {
         public int Id { get; set; }
         [Required]

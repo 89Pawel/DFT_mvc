@@ -31,7 +31,7 @@ namespace DFT_MVC.Migrations
                     b.Property<byte[]>("FullscreenContent")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int>("KategorieId")
+                    b.Property<int?>("KategoriaId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("OriginalContent")
@@ -51,13 +51,14 @@ namespace DFT_MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("KategorieId")
-                        .IsUnique();
+                    b.HasIndex("KategoriaId")
+                        .IsUnique()
+                        .HasFilter("[KategoriaId] IS NOT NULL");
 
                     b.ToTable("ImageData");
                 });
 
-            modelBuilder.Entity("DFT_MVC.Models.Kategorie", b =>
+            modelBuilder.Entity("DFT_MVC.Models.Kategoria", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,21 +75,19 @@ namespace DFT_MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Kategorie");
+                    b.ToTable("Kategoria");
                 });
 
             modelBuilder.Entity("DFT_MVC.Data.ImageData", b =>
                 {
-                    b.HasOne("DFT_MVC.Models.Kategorie", "Kategorie")
+                    b.HasOne("DFT_MVC.Models.Kategoria", "Kategoria")
                         .WithOne("ImageData")
-                        .HasForeignKey("DFT_MVC.Data.ImageData", "KategorieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DFT_MVC.Data.ImageData", "KategoriaId");
 
-                    b.Navigation("Kategorie");
+                    b.Navigation("Kategoria");
                 });
 
-            modelBuilder.Entity("DFT_MVC.Models.Kategorie", b =>
+            modelBuilder.Entity("DFT_MVC.Models.Kategoria", b =>
                 {
                     b.Navigation("ImageData");
                 });

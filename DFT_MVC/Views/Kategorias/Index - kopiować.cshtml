@@ -1,4 +1,6 @@
-﻿@model IEnumerable<DFT_MVC.Models.Kategorie>
+﻿@using DFT_MVC.Data
+@model DFT_MVC.ViewModel.KategorieViewModel
+@*@model IEnumerable<DFT_MVC.Models.Kategoria>*@
 
 @{
     ViewData["Title"] = "Index";
@@ -31,7 +33,17 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageData.ThumbnailSmallContent)
+
+                    @*<a asp-controller="Images" asp-action="All">
+                        <div class="image"></div>
+                </a>*@
+                    @*<img src=@Html.DisplayFor(modelItem => (item.ImageData.ThumbnailSmallContent)) width="100" height="100">*@
+                
+                 @*<img src="@Html.DisplayFor(modelItem => item.ImageData.ThumbnailSmallContent)">*@
+
+                    @*<img src="/Images/ThumbnailBig/@item.ImageData.ThumbnailSmallContent">*@
+                    @*@Html.DisplayFor(modelItem => item.ImageData.ThumbnailSmallContent)*@
+                    @*@Html.DisplayFor(modelItem => item.ImageData.ThumbnailSmallContent)*@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreationDate)
