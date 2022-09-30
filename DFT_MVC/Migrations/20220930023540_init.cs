@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DFT_MVC.Migrations
 {
-    public partial class @new : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,7 +34,7 @@ namespace DFT_MVC.Migrations
                     FullscreenContent = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     ThumbnailBigContent = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     ThumbnailSmallContent = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    KategoriaId = table.Column<int>(type: "int", nullable: true)
+                    KategoriaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,8 +50,7 @@ namespace DFT_MVC.Migrations
                 name: "IX_ImageData_KategoriaId",
                 table: "ImageData",
                 column: "KategoriaId",
-                unique: true,
-                filter: "[KategoriaId] IS NOT NULL");
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

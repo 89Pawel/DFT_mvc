@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DFT_MVC.Migrations
 {
     [DbContext(typeof(DFT_MVC_Context))]
-    [Migration("20220929010148_new")]
-    partial class @new
+    [Migration("20220930025156_cascade")]
+    partial class cascade
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,7 +33,7 @@ namespace DFT_MVC.Migrations
                     b.Property<byte[]>("FullscreenContent")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("KategoriaId")
+                    b.Property<int>("KategoriaId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("OriginalContent")
@@ -54,8 +54,7 @@ namespace DFT_MVC.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("KategoriaId")
-                        .IsUnique()
-                        .HasFilter("[KategoriaId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("ImageData");
                 });
@@ -84,7 +83,9 @@ namespace DFT_MVC.Migrations
                 {
                     b.HasOne("DFT_MVC.Models.Kategoria", "Kategoria")
                         .WithOne("ImageData")
-                        .HasForeignKey("DFT_MVC.Data.ImageData", "KategoriaId");
+                        .HasForeignKey("DFT_MVC.Data.ImageData", "KategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Kategoria");
                 });

@@ -165,11 +165,16 @@
                 return Problem("Entity set 'DFT_MVC_Context.Kategorie'  is null.");
             }
             var kategorie = await _context.Kategoria.FindAsync(id);
+            //var image = await _displayFromDBService.GetOneImage(kategorie.Id);
+
+
             if (kategorie != null)
             {
                 _context.Kategoria.Remove(kategorie);
+                //_context.ImageData.Remove(image);
+
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

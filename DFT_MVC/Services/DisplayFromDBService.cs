@@ -24,5 +24,12 @@
         public async Task<IEnumerable<ImageData>> GetImages() => Images = await _context.ImageData.ToListAsync();
 
         public async Task<IEnumerable<Kategoria>> GetKategorie() => Kategorie = await _context.Kategoria.ToListAsync();
+
+        public async Task<ImageData> GetOneImage(int id)
+        {
+            var image = await _context.ImageData.FirstOrDefaultAsync(i => i.KategoriaId == id);
+
+            return image;
+        }
     }
 }

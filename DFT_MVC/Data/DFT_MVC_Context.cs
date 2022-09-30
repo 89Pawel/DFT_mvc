@@ -14,12 +14,14 @@
 
         public DbSet<ImageData> ImageData { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Kategoria>()
-        //        .HasOne(i => i.ImageData)
-        //        .WithOne(a => a.Kategoria)
-        //        .HasForeignKey<ImageData>(i => i.KategoriaId);
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Kategoria>()
+                .HasOne(i => i.ImageData)
+                .WithOne(a => a.Kategoria)
+                .HasForeignKey<ImageData>(i => i.KategoriaId)
+                .OnDelete(DeleteBehavior.Cascade); ;
+            
+        }
     }
 }
