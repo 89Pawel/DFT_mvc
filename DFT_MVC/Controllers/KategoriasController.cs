@@ -8,6 +8,7 @@
     using DFT_MVC.Data;
     using DFT_MVC.Models;
     using DFT_MVC.Services;
+    using System.Diagnostics;
 
     public class KategoriasController : Controller
     {
@@ -25,7 +26,7 @@
         // GET: Kategories
         public async Task<IActionResult> Index()
         {
-            await _displayFromDBService.GetData();
+            await _displayFromDBService.GetDataDict();
             return View(_displayFromDBService);
         }
 
@@ -44,6 +45,13 @@
                 return NotFound();
             }
 
+            var test = await _displayFromDBService.GetDataDict();
+
+            foreach (var item in test)
+            {
+                Debug.WriteLine(item.Key.Name+": "+item.Key.Id+" || "+ item.Value.KategoriaId+": "+item.Value.OriginalFileName);
+
+            }
             return View(kategorie);
         }
 

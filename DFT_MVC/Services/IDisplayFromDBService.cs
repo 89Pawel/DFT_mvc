@@ -9,5 +9,7 @@
         public Task<IEnumerable<ImageData>> GetImages();
         public Task<ImageData> GetOneImage(int id);
         public Task GetData();
+
+        public Task<Dictionary<Kategoria, ImageData>> GetDataDict();
     }
 }

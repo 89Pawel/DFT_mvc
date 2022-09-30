@@ -3,6 +3,8 @@
     using DFT_MVC.Data;
     using DFT_MVC.Models;
     using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
+    using System.Diagnostics;
 
     public class DisplayFromDBService : IDisplayFromDBService
     {
@@ -14,6 +16,8 @@
         }
         public IEnumerable<Kategoria> Kategorie;
         public IEnumerable<ImageData> Images;
+        public Dictionary<Kategoria, ImageData> Display;
+
 
         public async Task GetData()
         {
@@ -30,6 +34,35 @@
             var image = await _context.ImageData.FirstOrDefaultAsync(i => i.KategoriaId == id);
 
             return image;
+        }
+
+        public async Task<Dictionary<Kategoria, ImageData>> GetDataDict()
+        {
+            var dict = new Dictionary<Kategoria, ImageData>();
+            var kat = await GetKategorie();
+            var zdj = await GetImages();
+
+
+            for (int i = 0; i < kat.ToList().Count; i++)
+            {
+                var key = kat.ToList()[i];
+                var value = zdj.FirstOrDefault(x => x.KategoriaId == kat.ToList()[i].Id);
+
+                if (value != null)
+                {
+                dict.Add(key, value);
+
+                }
+                else
+                {
+                    value = new ImageData() { };
+                    dict.Add(key, value);
+
+                }
+                //Debug.WriteLine(dict[i]);
+            }
+
+            return Display = dict;
         }
     }
 }
