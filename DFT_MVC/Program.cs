@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using DFT_MVC.Data;
 using Microsoft.AspNetCore.Hosting;
 using DFT_MVC.Services;
-using DFT_MVC.ViewModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +19,7 @@ builder.Services.AddDbContext<DFT_MVC_Context>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<IImageService, ImageService>();
-builder.Services.AddTransient<IKategorieService, KategorieViewModel>();
+builder.Services.AddTransient<IDisplayFromDBService, DisplayFromDBService>();
 
 var app = builder.Build();
 

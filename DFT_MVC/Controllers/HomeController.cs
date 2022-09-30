@@ -1,9 +1,9 @@
-﻿using DFT_MVC.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-
-namespace DFT_MVC.Controllers
+﻿namespace DFT_MVC.Controllers
 {
+    using DFT_MVC.Models;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Diagnostics;
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

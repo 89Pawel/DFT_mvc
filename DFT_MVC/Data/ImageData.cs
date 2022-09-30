@@ -1,9 +1,8 @@
-﻿using DFT_MVC.Models;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-
-namespace DFT_MVC.Data
+﻿namespace DFT_MVC.Data
 {
+    using DFT_MVC.Models;
+    using System.ComponentModel.DataAnnotations;
+
     public class ImageData
     {
         public ImageData() => Id = Guid.NewGuid();

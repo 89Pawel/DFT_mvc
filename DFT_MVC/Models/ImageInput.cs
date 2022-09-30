@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
-
-namespace DFT_MVC.Models
+﻿namespace DFT_MVC.Models
 {
     public class ImageInput
     {

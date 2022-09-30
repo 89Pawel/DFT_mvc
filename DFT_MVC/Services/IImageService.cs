@@ -1,7 +1,7 @@
-﻿using DFT_MVC.Models;
-
-namespace DFT_MVC.Services
+﻿namespace DFT_MVC.Services
 {
+    using DFT_MVC.Models;
+
     public interface IImageService
     {
         Task Process(IEnumerable<ImageInput> images, int? id);

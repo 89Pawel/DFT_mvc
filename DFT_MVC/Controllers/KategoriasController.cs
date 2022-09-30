@@ -1,47 +1,32 @@
 ﻿namespace DFT_MVC.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
     using DFT_MVC.Data;
     using DFT_MVC.Models;
     using DFT_MVC.Services;
-    using System.Diagnostics;
-    using DFT_MVC.ViewModel;
 
     public class KategoriasController : Controller
     {
         private readonly IImageService _imageService;
         private readonly DFT_MVC_Context _context;
-        private readonly IKategorieService _kategorieService;
+        private readonly IDisplayFromDBService _displayFromDBService;
 
-        public KategoriasController(DFT_MVC_Context context, IImageService imageService, IKategorieService kategorieService)
+        public KategoriasController(DFT_MVC_Context context, IImageService imageService, IDisplayFromDBService displayFromDBService)
         {
             _context = context;
             _imageService = imageService;
-            _kategorieService = kategorieService;
+            _displayFromDBService = displayFromDBService;
         }
 
         // GET: Kategories
         public async Task<IActionResult> Index()
         {
-            var kategorie = await _context.Kategoria.ToArrayAsync();
-            var images = await _context.ImageData.ToArrayAsync();
-            //var imageService = await _context.ImageData.Select(i => i.Id.ToString()).ToListAsync();
-            //var test = _context.Kategoria.Include(i => i.ImageData).AsNoTracking();
-            //var image = _context.ImageData.Single(i => i.KategoriaId == );
-            _kategorieService.Kategorie = kategorie;
-            _kategorieService.Images = images;
-            //_kategorieViewModel.Kategorie = kategorie;
-            //_kategorieViewModel.Images = images;
-
-            //_kategorieService.ImageServices = imageService;
-
-            return View(_kategorieService);
+            await _displayFromDBService.GetData();
+            return View(_displayFromDBService);
         }
 
         // GET: Kategories/Details/5
@@ -58,10 +43,6 @@
             {
                 return NotFound();
             }
-            //var test = await _context.ImageData.FirstOrDefaultAsync(m => m.KategoriaId == id);
-            var test = _context.ImageData.Single(i => i.KategoriaId == kategorie.Id);
-
-            Debug.WriteLine("QQQQQQQQQQQQQQQQQQQ " + test.OriginalFileName);
 
             return View(kategorie);
         }
@@ -82,16 +63,7 @@
             if (ModelState.IsValid)
             {
                 kategorie.CreationDate = DateTime.Today;
-                //kategorie.ImageData = new ImageData
-                //{
-                //    OriginalFileName = "dupa",
-                //    OriginalType = "jpg",
-                //    OriginalContent = new byte[1],
-                //    FullscreenContent = new byte[1],
-                //    ThumbnailBigContent = new byte[1],
-                //    ThumbnailSmallContent = new byte[1],
-                //    KategoriaId = 999
-                //};
+
                 _context.Add(kategorie);
 
                 await _context.SaveChangesAsync();

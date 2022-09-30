@@ -1,11 +1,10 @@
 ﻿@using DFT_MVC.Data
-@model DFT_MVC.ViewModel.KategorieViewModel
-@*@model IEnumerable<DFT_MVC.Models.Kategoria>*@
+@model DFT_MVC.Services.DisplayFromDBService
 
 @{
 	ViewData["Title"] = "Index";
 }
-
+<link rel="stylesheet" href="css/site.css">
 <h1>Index</h1>
 
 <p>
@@ -21,16 +20,6 @@
 		</tr>
 	</thead>
 	<tbody>
-		<style>
-
-
-			img {
-				width: 100px;
-				height: 60px;
-				object-fit: cover;
-			}
-
-		</style>
 		@foreach (var item in Model.Kategorie)
 		{
 			<tr>
@@ -43,10 +32,7 @@
 						if (image.KategoriaId == item.Id)
 						{
 							<img src="/Images/ThumbnailSmall/@image.Id">
-
-
 						}
-
 					}
 				</td>
 				<td>

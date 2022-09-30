@@ -2,7 +2,6 @@
 {
     using DFT_MVC.Data;
     using DFT_MVC.Models;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using SixLabors.ImageSharp;

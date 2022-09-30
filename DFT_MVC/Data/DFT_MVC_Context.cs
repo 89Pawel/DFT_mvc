@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using DFT_MVC.Models;
-
-namespace DFT_MVC.Data
+﻿namespace DFT_MVC.Data
 {
+    using Microsoft.EntityFrameworkCore;
+    using DFT_MVC.Models;
+
     public class DFT_MVC_Context : DbContext
     {
         public DFT_MVC_Context (DbContextOptions<DFT_MVC_Context> options)

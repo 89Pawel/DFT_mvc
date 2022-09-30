@@ -20,3 +20,13 @@ div.image::before {
     content: url(https://a.allegroimg.com/s1024/0c41d9/2f5916ad479f909b56fb3b9ea585);
 }
 
+img {
+    width: 100px;
+    height: 60px;
+    object-fit: cover;
+}
+
+td {
+    height: 70px;
+    vertical-align:middle;
+}

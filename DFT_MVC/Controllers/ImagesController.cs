@@ -1,12 +1,12 @@
-﻿using DFT_MVC.Data;
-using DFT_MVC.Models;
-using DFT_MVC.Services;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Serialization;
-
-namespace DFT_MVC.Controllers
+﻿namespace DFT_MVC.Controllers
 {
+    using DFT_MVC.Data;
+    using DFT_MVC.Models;
+    using DFT_MVC.Services;
+    using Microsoft.AspNetCore.Http.Features;
+    using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json.Serialization;
+
     public class ImagesController : Controller
     {
         private readonly IImageService _imageService;
