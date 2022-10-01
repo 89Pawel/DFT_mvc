@@ -5,7 +5,47 @@
 	ViewData["Title"] = "Index";
 }
 <link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/alertMsg.css">
+
+
 <h1>Index</h1>
+
+@if (TempData["ResultMessage"] != null)
+{
+	var delete = "#D0342C"; // czerwony
+	var create = "#53D02C"; // zielony
+	var update = "#2C82D0"; // niebieski
+	var color = string.Empty;
+
+	foreach (var alert in TempData["ResultMessage"] as IEnumerable<string>)
+	{
+		if (alert.EndsWith("1"))
+		{
+			color = create;
+		}
+		else if (alert.EndsWith("2"))
+		{
+			color = update;
+		}
+		else if (alert.EndsWith("3"))
+		{
+			color = delete;
+		}
+	}
+
+	<div class="alert">
+		<style>
+			.alert {
+				background-color: @color; /* green */
+			}
+		</style>
+		<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+		@foreach (var item in TempData["ResultMessage"] as IEnumerable<string>)
+		{
+			<a>@item.Remove(item.Length - 1)</a>
+		}
+	</div>
+}
 
 <p>
 	<a asp-action="Create">Create New</a>

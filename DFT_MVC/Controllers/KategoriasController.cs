@@ -15,12 +15,14 @@
         private readonly IImageService _imageService;
         private readonly DFT_MVC_Context _context;
         private readonly IDisplayFromDBService _displayFromDBService;
+        private readonly IAlertService _alertService;
 
-        public KategoriasController(DFT_MVC_Context context, IImageService imageService, IDisplayFromDBService displayFromDBService)
+        public KategoriasController(DFT_MVC_Context context, IImageService imageService, IDisplayFromDBService displayFromDBService, IAlertService alertService)
         {
             _context = context;
             _imageService = imageService;
             _displayFromDBService = displayFromDBService;
+            _alertService = alertService;
         }
 
         // GET: Kategories
@@ -73,13 +75,8 @@
                 kategorie.CreationDate = DateTime.Today;
 
                 _context.Add(kategorie);
-
                 await _context.SaveChangesAsync();
 
-                if (images.Length > 1)
-                {
-                    ModelState.AddModelError("images", "Nie możesz dodać więcej jak 10 zdjęć!");
-                }
                 await _imageService.Process(images.Select(i => new ImageInput
                 {
                     Name = i.FileName,
@@ -88,6 +85,8 @@
                 }),
                     kategorie.Id
                 );
+
+                TempData["ResultMessage"] = _alertService.TempDataAlert(kategorie.Name, 1);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -140,6 +139,9 @@
                         throw;
                     }
                 }
+
+                TempData["ResultMessage"] = _alertService.TempDataAlert(kategorie.Name, 2);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(kategorie);
@@ -173,17 +175,16 @@
                 return Problem("Entity set 'DFT_MVC_Context.Kategorie'  is null.");
             }
             var kategorie = await _context.Kategoria.FindAsync(id);
-            //var image = await _displayFromDBService.GetOneImage(kategorie.Id);
-
 
             if (kategorie != null)
             {
                 _context.Kategoria.Remove(kategorie);
-                //_context.ImageData.Remove(image);
-
             }
 
             await _context.SaveChangesAsync();
+
+            TempData["ResultMessage"] = _alertService.TempDataAlert(kategorie.Name, 3);
+
             return RedirectToAction(nameof(Index));
         }
 

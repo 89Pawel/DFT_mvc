@@ -20,6 +20,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IDisplayFromDBService, DisplayFromDBService>();
+builder.Services.AddTransient<IAlertService, AlertService>();
 
 var app = builder.Build();
 
