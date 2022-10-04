@@ -2,6 +2,7 @@
 {
     using DFT_MVC.Data;
     using DFT_MVC.Models;
+    using Microsoft.Build.Framework;
     using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using SixLabors.ImageSharp;
@@ -37,7 +38,7 @@
 
         public Task<Stream> GetThumbnailSmall(string id) => GetImageData(id, thumbnailSmall);
 
-        public async Task Process(IEnumerable<ImageInput> images, int? id)
+        public async Task Process(IEnumerable<ImageInput> images, int id)
         {
             var tasks = images
                 .Select(image => Task.Run(async () =>
@@ -51,6 +52,7 @@
 
                     var database = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<DFT_MVC_Context>();
 
+                    //database.ImageData.Add(new ImageData
                     database.ImageData.Add(new ImageData
                     {
                         OriginalFileName = image.Name,
@@ -59,9 +61,8 @@
                         FullscreenContent = fullscreen,
                         ThumbnailBigContent = thumbnailBig,
                         ThumbnailSmallContent = thumbnailSmall,
-                        KategoriaId = (int)id
+                        KategoriaId = id
                     });
-
                     await database.SaveChangesAsync();
 
                 })).ToList();

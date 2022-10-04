@@ -14,22 +14,30 @@
     {
         private readonly IImageService _imageService;
         private readonly DFT_MVC_Context _context;
-        private readonly IDisplayFromDBService _displayFromDBService;
+        //private readonly IDisplayFromDBService _displayFromDBService;
         private readonly IAlertService _alertService;
+        private readonly ImagesController _imagesController;
 
-        public KategoriasController(DFT_MVC_Context context, IImageService imageService, IDisplayFromDBService displayFromDBService, IAlertService alertService)
+        public KategoriasController(DFT_MVC_Context context, IImageService imageService, IAlertService alertService, ImagesController imagesController)
         {
             _context = context;
             _imageService = imageService;
-            _displayFromDBService = displayFromDBService;
+            //_displayFromDBService = displayFromDBService;
             _alertService = alertService;
+            _imagesController = imagesController;
         }
 
         // GET: Kategories
+        //public async Task<IActionResult> Index()
+        //{
+        //    await _displayFromDBService.GetDataDict();
+        //    return View(_displayFromDBService);
+        //}
         public async Task<IActionResult> Index()
         {
-            await _displayFromDBService.GetDataDict();
-            return View(_displayFromDBService);
+            var kategorie = await _context.Kategoria.Include(i => i.ImageData).ToListAsync();
+            //await _displayFromDBService.GetDataDict();
+            return View(kategorie);
         }
 
         // GET: Kategories/Details/5
@@ -47,13 +55,13 @@
                 return NotFound();
             }
 
-            var test = await _displayFromDBService.GetDataDict();
+            //var test = await _displayFromDBService.GetDataDict();
 
-            foreach (var item in test)
-            {
-                Debug.WriteLine(item.Key.Name+": "+item.Key.Id+" || "+ item.Value.KategoriaId+": "+item.Value.OriginalFileName);
+            //foreach (var item in test)
+            //{
+            //    Debug.WriteLine(item.Key.Name+": "+item.Key.Id+" || "+ item.Value.KategoriaId+": "+item.Value.OriginalFileName);
 
-            }
+            //}
             return View(kategorie);
         }
 
@@ -73,18 +81,19 @@
             if (ModelState.IsValid)
             {
                 kategorie.CreationDate = DateTime.Today;
-
+                
                 _context.Add(kategorie);
                 await _context.SaveChangesAsync();
+                await _imagesController.Upload(images, kategorie.Id);
 
-                await _imageService.Process(images.Select(i => new ImageInput
-                {
-                    Name = i.FileName,
-                    Type = i.ContentType,
-                    Content = i.OpenReadStream()
-                }),
-                    kategorie.Id
-                );
+                //await _imageService.Process(images.Select(i => new ImageInput
+                //{
+                //    Name = i.FileName,
+                //    Type = i.ContentType,
+                //    Content = i.OpenReadStream()
+                //}),
+                //    kategorie.Id
+                //);
 
                 TempData["ResultMessage"] = _alertService.TempDataAlert(kategorie.Name, 1);
 

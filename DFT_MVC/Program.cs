@@ -19,8 +19,9 @@ builder.Services.AddDbContext<DFT_MVC_Context>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<IImageService, ImageService>();
-builder.Services.AddTransient<IDisplayFromDBService, DisplayFromDBService>();
+//builder.Services.AddTransient<IDisplayFromDBService, DisplayFromDBService>();
 builder.Services.AddTransient<IAlertService, AlertService>();
+builder.Services.AddTransient<DFT_MVC.Controllers.ImagesController, DFT_MVC.Controllers.ImagesController>();
 
 var app = builder.Build();
 

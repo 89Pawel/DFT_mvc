@@ -34,7 +34,7 @@ namespace DFT_MVC.Migrations
                     FullscreenContent = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     ThumbnailBigContent = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     ThumbnailSmallContent = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    KategoriaId = table.Column<int>(type: "int", nullable: false)
+                    KategoriaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,14 +43,16 @@ namespace DFT_MVC.Migrations
                         name: "FK_ImageData_Kategoria_KategoriaId",
                         column: x => x.KategoriaId,
                         principalTable: "Kategoria",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ImageData_KategoriaId",
                 table: "ImageData",
                 column: "KategoriaId",
-                unique: true);
+                unique: true,
+                filter: "[KategoriaId] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
