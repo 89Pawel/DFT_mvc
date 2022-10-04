@@ -14,39 +14,39 @@
         {
             _context = context;
         }
-        public IEnumerable<Kategoria> Kategorie;
+        public IEnumerable<Category> Categories;
         public IEnumerable<ImageData> Images;
-        public Dictionary<Kategoria, ImageData> Display;
+        public Dictionary<Category, ImageData> Display;
 
 
         public async Task GetData()
         {
-            Kategorie = await _context.Kategoria.ToListAsync();
+            Categories = await _context.Category.ToListAsync();
             Images = await _context.ImageData.ToListAsync();
         }
 
         public async Task<IEnumerable<ImageData>> GetImages() => Images = await _context.ImageData.ToListAsync();
 
-        public async Task<IEnumerable<Kategoria>> GetKategorie() => Kategorie = await _context.Kategoria.ToListAsync();
+        public async Task<IEnumerable<Category>> GetCategories() => Categories = await _context.Category.ToListAsync();
 
         public async Task<ImageData> GetOneImage(int id)
         {
-            var image = await _context.ImageData.FirstOrDefaultAsync(i => i.KategoriaId == id);
+            var image = await _context.ImageData.FirstOrDefaultAsync(i => i.CategoryId == id);
 
             return image;
         }
 
-        public async Task<Dictionary<Kategoria, ImageData>> GetDataDict()
+        public async Task<Dictionary<Category, ImageData>> GetDataDict()
         {
-            var dict = new Dictionary<Kategoria, ImageData>();
-            var kat = await GetKategorie();
+            var dict = new Dictionary<Category, ImageData>();
+            var kat = await GetCategories();
             var zdj = await GetImages();
 
 
             for (int i = 0; i < kat.ToList().Count; i++)
             {
                 var key = kat.ToList()[i];
-                var value = zdj.FirstOrDefault(x => x.KategoriaId == kat.ToList()[i].Id);
+                var value = zdj.FirstOrDefault(x => x.CategoryId == kat.ToList()[i].Id);
 
                 if (value != null)
                 {

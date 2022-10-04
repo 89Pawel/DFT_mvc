@@ -17,7 +17,7 @@
         public byte[] ThumbnailBigContent { get; set; }
         [Display(Name = "Zdjęcie")]
         public byte[] ThumbnailSmallContent { get; set; }
-        public int KategoriaId { get; set; }
-        public Kategoria Kategoria { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Kategorias\Index - kopiować.cshtml" />
+    <Content Remove="Views\Categories\Index - kopiować.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

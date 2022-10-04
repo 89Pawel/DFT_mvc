@@ -10,16 +10,16 @@
         {
         }
 
-        public DbSet<Kategoria> Kategoria { get; set; } = default!;
+        public DbSet<Category> Category { get; set; } = default!;
 
         public DbSet<ImageData> ImageData { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Kategoria>()
+            modelBuilder.Entity<Category>()
                 .HasOne(i => i.ImageData)
-                .WithOne(a => a.Kategoria)
-                .HasForeignKey<ImageData>(i => i.KategoriaId)
+                .WithOne(a => a.Category)
+                .HasForeignKey<ImageData>(i => i.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade); ;
             
         }

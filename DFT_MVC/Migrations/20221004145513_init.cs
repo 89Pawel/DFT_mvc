@@ -10,7 +10,7 @@ namespace DFT_MVC.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Kategoria",
+                name: "Category",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -20,7 +20,7 @@ namespace DFT_MVC.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Kategoria", x => x.Id);
+                    table.PrimaryKey("PK_Category", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,25 +34,24 @@ namespace DFT_MVC.Migrations
                     FullscreenContent = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     ThumbnailBigContent = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     ThumbnailSmallContent = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    KategoriaId = table.Column<int>(type: "int", nullable: true)
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ImageData", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ImageData_Kategoria_KategoriaId",
-                        column: x => x.KategoriaId,
-                        principalTable: "Kategoria",
+                        name: "FK_ImageData_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageData_KategoriaId",
+                name: "IX_ImageData_CategoryId",
                 table: "ImageData",
-                column: "KategoriaId",
-                unique: true,
-                filter: "[KategoriaId] IS NOT NULL");
+                column: "CategoryId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -61,7 +60,7 @@ namespace DFT_MVC.Migrations
                 name: "ImageData");
 
             migrationBuilder.DropTable(
-                name: "Kategoria");
+                name: "Category");
         }
     }
 }

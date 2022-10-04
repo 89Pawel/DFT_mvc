@@ -5,11 +5,11 @@
 
     public interface IDisplayFromDBService
 	{
-        public Task<IEnumerable<Kategoria>> GetKategorie();
+        public Task<IEnumerable<Category>> GetCategories();
         public Task<IEnumerable<ImageData>> GetImages();
         public Task<ImageData> GetOneImage(int id);
         public Task GetData();
 
-        public Task<Dictionary<Kategoria, ImageData>> GetDataDict();
+        public Task<Dictionary<Category, ImageData>> GetDataDict();
     }
 }

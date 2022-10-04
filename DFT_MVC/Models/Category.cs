@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Mvc;
     using System.ComponentModel.DataAnnotations;
 
-    public class Kategoria
+    public class Category
     {
         public int Id { get; set; }
         [Required]

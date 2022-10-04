@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DFT_MVC.Migrations
 {
     [DbContext(typeof(DFT_MVC_Context))]
-    [Migration("20221004142345_init")]
+    [Migration("20221004145513_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,11 +30,11 @@ namespace DFT_MVC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<byte[]>("FullscreenContent")
                         .HasColumnType("varbinary(max)");
-
-                    b.Property<int?>("KategoriaId")
-                        .HasColumnType("int");
 
                     b.Property<byte[]>("OriginalContent")
                         .HasColumnType("varbinary(max)");
@@ -53,14 +53,13 @@ namespace DFT_MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("KategoriaId")
-                        .IsUnique()
-                        .HasFilter("[KategoriaId] IS NOT NULL");
+                    b.HasIndex("CategoryId")
+                        .IsUnique();
 
                     b.ToTable("ImageData");
                 });
 
-            modelBuilder.Entity("DFT_MVC.Models.Kategoria", b =>
+            modelBuilder.Entity("DFT_MVC.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,20 +76,21 @@ namespace DFT_MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Kategoria");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("DFT_MVC.Data.ImageData", b =>
                 {
-                    b.HasOne("DFT_MVC.Models.Kategoria", "Kategoria")
+                    b.HasOne("DFT_MVC.Models.Category", "Category")
                         .WithOne("ImageData")
-                        .HasForeignKey("DFT_MVC.Data.ImageData", "KategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DFT_MVC.Data.ImageData", "CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Kategoria");
+                    b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("DFT_MVC.Models.Kategoria", b =>
+            modelBuilder.Entity("DFT_MVC.Models.Category", b =>
                 {
                     b.Navigation("ImageData");
                 });

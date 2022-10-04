@@ -61,7 +61,7 @@
                         FullscreenContent = fullscreen,
                         ThumbnailBigContent = thumbnailBig,
                         ThumbnailSmallContent = thumbnailSmall,
-                        KategoriaId = id
+                        CategoryId = id
                     });
                     await database.SaveChangesAsync();
 
