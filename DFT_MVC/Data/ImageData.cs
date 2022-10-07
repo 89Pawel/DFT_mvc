@@ -2,22 +2,33 @@
 {
     using DFT_MVC.Models;
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.CodeAnalysis;
 
     public class ImageData
     {
         public ImageData() => Id = Guid.NewGuid();
-
+        [Required]
         public Guid Id { get; set; }
-        public string OriginalFileName { get; set; }
-        public string OriginalType { get; set; }
-        public byte[] OriginalContent { get; set; }
+        [Required]
+        public string? OriginalFileName { get; set; }
+        [Required]
+        public string? OriginalType { get; set; }
+        [Required]
+        public byte[]? OriginalContent { get; set; }
+        [Required]
         [Display(Name = "Zdjęcie")]
-        public byte[] FullscreenContent { get; set; }
+        public byte[]? FullscreenContent { get; set; }
+        [Required]
         [Display(Name = "Zdjęcie")]
-        public byte[] ThumbnailBigContent { get; set; }
+        public byte[]? ThumbnailBigContent { get; set; }
+        [Required]
         [Display(Name = "Zdjęcie")]
-        public byte[] ThumbnailSmallContent { get; set; }
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public byte[]? ThumbnailSmallContent { get; set; }
+
+        public Category? Category { get; set; }
+        public int? CategoryId { get; set; }
+        
+        public Subcategory? Subcategory { get; set; }
+        public int? SubcategoryId { get; set; }
     }
 }

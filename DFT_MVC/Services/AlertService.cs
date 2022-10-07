@@ -23,7 +23,7 @@ namespace DFT_MVC.Services
 
             var alert = new List<string> { alertBody };
 
-			return alert;
+			return alert!;
 		}
 	}
 }

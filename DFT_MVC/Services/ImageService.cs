@@ -30,7 +30,7 @@
             this.dbContext = dbContext;
         }
 
-        public Task<List<string>> GetAllImages() => dbContext.ImageData.Select(i => i.Id.ToString()).ToListAsync();
+        public Task<List<string>> GetAllImages() => dbContext.ImageDatas!.Select(i => i.Id.ToString()).ToListAsync();
 
         public Task<Stream> GetFullscreen(string id) => GetImageData(id, fullscreen);
 
@@ -38,7 +38,7 @@
 
         public Task<Stream> GetThumbnailSmall(string id) => GetImageData(id, thumbnailSmall);
 
-        public async Task Process(IEnumerable<ImageInput> images, int id)
+        public async Task Process(IEnumerable<ImageInput> images, int? categoryId = null, int? subcategoryId = null)
         {
             var tasks = images
                 .Select(image => Task.Run(async () =>
@@ -53,7 +53,7 @@
                     var database = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<DFT_MVC_Context>();
 
                     //database.ImageData.Add(new ImageData
-                    database.ImageData.Add(new ImageData
+                    database.ImageDatas!.Add(new ImageData
                     {
                         OriginalFileName = image.Name,
                         OriginalType = image.Type,
@@ -61,7 +61,8 @@
                         FullscreenContent = fullscreen,
                         ThumbnailBigContent = thumbnailBig,
                         ThumbnailSmallContent = thumbnailSmall,
-                        CategoryId = id
+                        CategoryId = categoryId,
+                        SubcategoryId = subcategoryId,
                     });
                     await database.SaveChangesAsync();
 
@@ -100,7 +101,7 @@
             var database = dbContext.Database;
             var dbConnection = (SqlConnection)database.GetDbConnection();
             var command = new SqlCommand(
-                $"SELECT {size} FROM ImageData WHERE Id = @id;",
+                $"SELECT {size} FROM ImageDatas WHERE Id = @id;",
                 dbConnection);
 
             command.Parameters.Add(new SqlParameter("@id", id));
@@ -109,7 +110,7 @@
 
             var reader = await command.ExecuteReaderAsync();
 
-            Stream result = null;
+            Stream result = null!;
 
             if (reader.HasRows)
             {

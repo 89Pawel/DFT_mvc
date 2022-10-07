@@ -35,7 +35,7 @@
         //}
         public async Task<IActionResult> Index()
         {
-            var categories = await _context.Category.Include(i => i.ImageData).ToListAsync();
+            var categories = await _context.Categories.Include(i => i.ImageData).Include(i => i.Subcategories).ToListAsync();
             //await _displayFromDBService.GetDataDict();
             return View(categories);
         }
@@ -43,12 +43,12 @@
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category
+            var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
@@ -80,11 +80,9 @@
         {
             if (ModelState.IsValid)
             {
-                category.CreationDate = DateTime.Today;
-                
                 _context.Add(category);
                 await _context.SaveChangesAsync();
-                await _imagesController.Upload(images, category.Id);
+                await _imagesController.Upload(images, categoryId: category.Id);
 
                 //await _imageService.Process(images.Select(i => new ImageInput
                 //{
@@ -95,7 +93,7 @@
                 //    kategorie.Id
                 //);
 
-                TempData["ResultMessage"] = _alertService.TempDataAlert(category.Name, 1);
+                TempData["ResultMessage"] = _alertService.TempDataAlert(category.Name!, 1);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -105,12 +103,12 @@
         // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category.FindAsync(id);
+            var category = await _context.Categories.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -149,7 +147,7 @@
                     }
                 }
 
-                TempData["ResultMessage"] = _alertService.TempDataAlert(category.Name, 2);
+                TempData["ResultMessage"] = _alertService.TempDataAlert(category.Name!, 2);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -159,12 +157,12 @@
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category
+            var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
@@ -179,27 +177,27 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Category == null)
+            if (_context.Categories == null)
             {
                 return Problem("Entity set 'DFT_MVC_Context.Categories'  is null.");
             }
-            var category = await _context.Category.FindAsync(id);
+            var category = await _context.Categories.FindAsync(id);
 
             if (category != null)
             {
-                _context.Category.Remove(category);
+                _context.Categories.Remove(category);
             }
 
             await _context.SaveChangesAsync();
 
-            TempData["ResultMessage"] = _alertService.TempDataAlert(category.Name, 3);
+            TempData["ResultMessage"] = _alertService.TempDataAlert(category!.Name!, 3);
 
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-          return _context.Category.Any(e => e.Id == id);
+          return _context.Categories.Any(e => e.Id == id);
         }
     }
 }

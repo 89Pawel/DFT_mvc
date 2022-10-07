@@ -3,6 +3,7 @@
 
 @{
 	ViewData["Title"] = "Index";
+	var alertList = TempData["ResultMessage"] as IEnumerable<string>;
 }
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="css/alertMsg.css">
@@ -10,14 +11,14 @@
 
 <h1>Lista Kategorii</h1>
 
-@if (TempData["ResultMessage"] != null)
+@if (alertList != null)
 {
 	var delete = "#D0342C"; // czerwony
 	var create = "#53D02C"; // zielony
 	var update = "#2C82D0"; // niebieski
 	var color = string.Empty;
 
-	foreach (var alert in TempData["ResultMessage"] as IEnumerable<string>)
+	foreach (var alert in alertList!)
 	{
 		if (alert.EndsWith("1"))
 		{
@@ -40,7 +41,7 @@
 			}
 		</style>
 		<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-		@foreach (var item in TempData["ResultMessage"] as IEnumerable<string>)
+		@foreach (var item in alertList!)
 		{
 			<a>@item.Remove(item.Length - 1)</a>
 		}
@@ -64,7 +65,10 @@
 		{
 			<tr>
 				<td>
-					@Html.DisplayFor(modelItem => item.Name)
+					<a asp-controller="Subcategories" asp-action="Index" asp-route-id="@item.Id">
+						@Html.DisplayFor(modelItem => item.Name)
+					</a>
+					
 				</td>
 				<td>
 					@if (item.ImageData != null)

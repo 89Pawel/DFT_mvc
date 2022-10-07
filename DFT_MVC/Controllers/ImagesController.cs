@@ -22,7 +22,7 @@
 
         [HttpPost]
         [RequestSizeLimit(100 * 1024 * 1024)]
-        public async Task<IActionResult> Upload(IFormFile[] images, int id)
+        public async Task<IActionResult> Upload(IFormFile[] images, int? categoryId = null, int? subcategoryId = null)
         {
                 if (images != null)
                 {
@@ -38,7 +38,7 @@
                             Name = i.FileName,
                             Type = i.ContentType,
                             Content = i.OpenReadStream(),
-                        }), id);
+                        }),categoryId, subcategoryId);
 
                         return RedirectToAction(nameof(this.Done));
                     }
