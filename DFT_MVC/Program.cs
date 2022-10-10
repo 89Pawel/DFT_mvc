@@ -22,6 +22,8 @@ builder.Services.AddTransient<IImageService, ImageService>();
 //builder.Services.AddTransient<IDisplayFromDBService, DisplayFromDBService>();
 builder.Services.AddTransient<IAlertService, AlertService>();
 builder.Services.AddTransient<DFT_MVC.Controllers.ImagesController, DFT_MVC.Controllers.ImagesController>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
+
 
 var app = builder.Build();
 
@@ -39,6 +41,10 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "Category",
+    pattern: "{controller=Categories}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

@@ -9,6 +9,10 @@
     using DFT_MVC.Models;
     using DFT_MVC.Services;
     using System.Diagnostics;
+    using Microsoft.AspNetCore.Components.Forms;
+    using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+    using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
 
     public class CategoriesController : Controller
     {
@@ -17,15 +21,19 @@
         //private readonly IDisplayFromDBService _displayFromDBService;
         private readonly IAlertService _alertService;
         private readonly ImagesController _imagesController;
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesController(DFT_MVC_Context context, IImageService imageService, IAlertService alertService, ImagesController imagesController)
+        public CategoriesController(DFT_MVC_Context context, IImageService imageService, IAlertService alertService, ImagesController imagesController, ICategoryService categoryService)
         {
             _context = context;
             _imageService = imageService;
             //_displayFromDBService = displayFromDBService;
             _alertService = alertService;
             _imagesController = imagesController;
+            _categoryService = categoryService;
         }
+        public async Task<IActionResult> ImageSmall(string id) => File(await _categoryService.GetImageSmall(id), "image/jpeg");
+        public async Task<IActionResult> ImageBig(string id) => File(await _categoryService.GetImageBig(id), "image/jpeg");
 
         // GET: Categories
         //public async Task<IActionResult> Index()
@@ -35,7 +43,8 @@
         //}
         public async Task<IActionResult> Index()
         {
-            var categories = await _context.Categories.Include(i => i.ImageData).Include(i => i.Subcategories).ToListAsync();
+            //var categories = await _context.Categories.Include(i => i.ImageData).Include(i => i.Subcategories).ToListAsync();
+            var categories = await _context.Categories.Include(i => i.Subcategories).ToListAsync();
             //await _displayFromDBService.GetDataDict();
             return View(categories);
         }
@@ -65,6 +74,7 @@
             return View(category);
         }
 
+
         // GET: Categories/Create
         public IActionResult Create()
         {
@@ -76,22 +86,11 @@
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,CreationDate")] Category category, IFormFile[] images)
+        public async Task<IActionResult> Create([Bind("Id,Name,CreationDate")] Category category, IFormFile? image)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-                await _imagesController.Upload(images, categoryId: category.Id);
-
-                //await _imageService.Process(images.Select(i => new ImageInput
-                //{
-                //    Name = i.FileName,
-                //    Type = i.ContentType,
-                //    Content = i.OpenReadStream()
-                //}),
-                //    kategorie.Id
-                //);
+                await _categoryService.CreateCategory(category, image);
 
                 TempData["ResultMessage"] = _alertService.TempDataAlert(category.Name!, 1);
 
@@ -121,7 +120,7 @@
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CreationDate")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,CreationDate")] Category category, IFormFile? image)
         {
             if (id != category.Id)
             {
@@ -132,8 +131,7 @@
             {
                 try
                 {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    await _categoryService.UpdateCategory(category, image);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -181,10 +179,14 @@
             {
                 return Problem("Entity set 'DFT_MVC_Context.Categories'  is null.");
             }
-            var category = await _context.Categories.FindAsync(id);
+            //var category = await _context.Categories.Include(i => i.ImageData).SingleAsync(i => i.Id == id);
+            //var subcategory = await _context.Subcategories.Include(i => i.ImageData).SingleAsync(i => i.CategoryId == id);
+            //var image = await _context.ImageDatas.SingleAsync(i => i.SubcategoryId == subcategory.Id);
+            var category = await _context.Categories.Include(i => i.Subcategories).SingleAsync(i => i.Id == id);
 
             if (category != null)
             {
+                //_context.Subcategories.Remove(subcategory);
                 _context.Categories.Remove(category);
             }
 

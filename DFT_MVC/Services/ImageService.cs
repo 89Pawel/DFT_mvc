@@ -19,6 +19,7 @@
         private readonly DFT_MVC_Context dbContext;
         private readonly IServiceScopeFactory serviceScopeFactory;
 
+        private readonly string tableName = "ImageDatas";
         private readonly string fullscreen = "FullscreenContent";
         private readonly string thumbnailBig = "ThumbnailBigContent";
         private readonly string thumbnailSmall = "ThumbnailSmallContent";
@@ -32,13 +33,13 @@
 
         public Task<List<string>> GetAllImages() => dbContext.ImageDatas!.Select(i => i.Id.ToString()).ToListAsync();
 
-        public Task<Stream> GetFullscreen(string id) => GetImageData(id, fullscreen);
+        public Task<Stream> GetFullscreen(string id) => GetImageData(id, tableName, fullscreen, dbContext);
 
-        public Task<Stream> GetThumbnailBig(string id) => GetImageData(id, thumbnailBig);
+        public Task<Stream> GetThumbnailBig(string id) => GetImageData(id, tableName, thumbnailBig, dbContext);
 
-        public Task<Stream> GetThumbnailSmall(string id) => GetImageData(id, thumbnailSmall);
+        public Task<Stream> GetThumbnailSmall(string id) => GetImageData(id, tableName, thumbnailSmall, dbContext);
 
-        public async Task Process(IEnumerable<ImageInput> images, int? categoryId = null, int? subcategoryId = null)
+        public async Task Process(IEnumerable<ImageInput> images)
         {
             var tasks = images
                 .Select(image => Task.Run(async () =>
@@ -61,8 +62,6 @@
                         FullscreenContent = fullscreen,
                         ThumbnailBigContent = thumbnailBig,
                         ThumbnailSmallContent = thumbnailSmall,
-                        CategoryId = categoryId,
-                        SubcategoryId = subcategoryId,
                     });
                     await database.SaveChangesAsync();
 
@@ -71,7 +70,7 @@
             await Task.WhenAll(tasks);
         }
 
-        private async Task<byte[]> SaveImage(Image image, int resizeWidth)
+        public async Task<byte[]> SaveImage(Image image, int resizeWidth)
         {
             var width = image.Width;
             var height = image.Height;
@@ -96,12 +95,13 @@
 
             return memoryStream.ToArray();
         }
-         private async Task<Stream> GetImageData(string id, string size)
+
+        public async Task<Stream> GetImageData(string id, string size, string tableName, DbContext dbContext)
         {
             var database = dbContext.Database;
             var dbConnection = (SqlConnection)database.GetDbConnection();
             var command = new SqlCommand(
-                $"SELECT {size} FROM ImageDatas WHERE Id = @id;",
+                $"SELECT {size} FROM {tableName} WHERE Id = @id;",
                 dbConnection);
 
             command.Parameters.Add(new SqlParameter("@id", id));

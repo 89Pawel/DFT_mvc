@@ -38,7 +38,7 @@
                             Name = i.FileName,
                             Type = i.ContentType,
                             Content = i.OpenReadStream(),
-                        }),categoryId, subcategoryId);
+                        }));
 
                         return RedirectToAction(nameof(this.Done));
                     }

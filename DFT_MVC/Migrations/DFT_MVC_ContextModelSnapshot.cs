@@ -28,9 +28,6 @@ namespace DFT_MVC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("FullscreenContent")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
@@ -60,10 +57,6 @@ namespace DFT_MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId")
-                        .IsUnique()
-                        .HasFilter("[CategoryId] IS NOT NULL");
-
                     b.HasIndex("SubcategoryId")
                         .IsUnique()
                         .HasFilter("[SubcategoryId] IS NOT NULL");
@@ -81,6 +74,15 @@ namespace DFT_MVC.Migrations
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("ImageBig")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("ImageOriginal")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("ImageSmall")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -121,17 +123,10 @@ namespace DFT_MVC.Migrations
 
             modelBuilder.Entity("DFT_MVC.Data.ImageData", b =>
                 {
-                    b.HasOne("DFT_MVC.Models.Category", "Category")
-                        .WithOne("ImageData")
-                        .HasForeignKey("DFT_MVC.Data.ImageData", "CategoryId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("DFT_MVC.Models.Subcategory", "Subcategory")
                         .WithOne("ImageData")
                         .HasForeignKey("DFT_MVC.Data.ImageData", "SubcategoryId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("Category");
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Subcategory");
                 });
@@ -149,8 +144,6 @@ namespace DFT_MVC.Migrations
 
             modelBuilder.Entity("DFT_MVC.Models.Category", b =>
                 {
-                    b.Navigation("ImageData");
-
                     b.Navigation("Subcategories");
                 });
 

@@ -4,7 +4,7 @@
 
     public interface IImageService
     {
-        Task Process(IEnumerable<ImageInput> images, int? categoryId = null, int? subcategoryId = null);
+        Task Process(IEnumerable<ImageInput> images);
         Task<List<string>> GetAllImages();
         Task<Stream> GetFullscreen(string id);
         Task<Stream> GetThumbnailBig(string id);

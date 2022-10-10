@@ -15,7 +15,11 @@
         [DataType(DataType.Date)]
         [HiddenInput]
         public DateTime CreationDate {get; set; } = DateTime.Today;
-        public ImageData? ImageData { get; set; }
+        public byte[]? ImageOriginal { get; set; } = null;
+        [Display(Name = "Zdjęcie")]
+        public byte[]? ImageBig { get; set; } = null;
+        [Display(Name = "Zdjęcie")]
+        public byte[]? ImageSmall { get; set; } = null;
         public List<Subcategory> Subcategories { get; set; } = new List<Subcategory>();
     }
 }

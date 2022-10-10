@@ -25,9 +25,6 @@
         [Display(Name = "Zdjęcie")]
         public byte[]? ThumbnailSmallContent { get; set; }
 
-        public Category? Category { get; set; }
-        public int? CategoryId { get; set; }
-        
         public Subcategory? Subcategory { get; set; }
         public int? SubcategoryId { get; set; }
     }

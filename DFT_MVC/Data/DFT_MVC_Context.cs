@@ -23,11 +23,11 @@
                 //.WithOne(i => i.Category)
                 //.HasForeignKey(i => i.CategoryId);
 
-                eb.HasOne(i => i.ImageData)
-                .WithOne(a => a.Category)
-                .IsRequired(false)
-                .HasForeignKey<ImageData>(i => i.CategoryId)
-                .OnDelete(DeleteBehavior.SetNull);
+                //eb.HasOne(i => i.ImageData)
+                //.WithOne(a => a.Category)
+                //.IsRequired(false)
+                //.HasForeignKey<ImageData>(i => i.CategoryId)
+                //.OnDelete(DeleteBehavior.NoAction);
 
 
             });
@@ -37,7 +37,7 @@
                 eb.HasOne(i => i.Category)
                 .WithMany(i => i.Subcategories)
                 .IsRequired()
-                .HasForeignKey(i => i.CategoryId)
+                .HasForeignKey(i => i.CategoryId).HasPrincipalKey(i => i.Id)
                 .OnDelete(DeleteBehavior.Cascade);
               
 
@@ -45,7 +45,7 @@
                 .WithOne(i => i.Subcategory)
                 .IsRequired(false)
                 .HasForeignKey<ImageData>(i => i.SubcategoryId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.NoAction);
                 
 
 

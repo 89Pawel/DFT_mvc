@@ -71,9 +71,18 @@
 					
 				</td>
 				<td>
-					@if (item.ImageData != null)
+@*					@if (item.ImageData != null)
 					{
 						<img src="/Images/ThumbnailSmall/@item.ImageData.Id">
+					}*@
+					@if (item.ImageOriginal != null)
+					{
+						<img src="/Categories/ImageSmall/@item.Id">
+						
+					}
+					else
+					{
+						<img src="~/images/no_image.png">
 					}
 				</td>
 				<td>

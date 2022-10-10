@@ -16,7 +16,10 @@ namespace DFT_MVC.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ImageOriginal = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ImageBig = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ImageSmall = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,7 +44,8 @@ namespace DFT_MVC.Migrations
                         name: "FK_Subcategories_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,30 +59,17 @@ namespace DFT_MVC.Migrations
                     FullscreenContent = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     ThumbnailBigContent = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     ThumbnailSmallContent = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: true),
                     SubcategoryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ImageDatas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ImageDatas_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_ImageDatas_Subcategories_SubcategoryId",
                         column: x => x.SubcategoryId,
                         principalTable: "Subcategories",
                         principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ImageDatas_CategoryId",
-                table: "ImageDatas",
-                column: "CategoryId",
-                unique: true,
-                filter: "[CategoryId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ImageDatas_SubcategoryId",

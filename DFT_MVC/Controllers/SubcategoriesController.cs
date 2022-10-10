@@ -155,7 +155,7 @@ namespace DFT_MVC.Controllers
             {
                 return Problem("Entity set 'DFT_MVC_Context.Subcategories'  is null.");
             }
-            var subcategory = await _context.Subcategories.FindAsync(id);
+            var subcategory = await _context.Subcategories.Include(i => i.ImageData).SingleAsync(i => i.Id == id);
             if (subcategory != null)
             {
                 _context.Subcategories.Remove(subcategory);
