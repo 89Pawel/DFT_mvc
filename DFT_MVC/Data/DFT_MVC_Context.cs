@@ -19,9 +19,10 @@
         {
             modelBuilder.Entity<Category>(eb =>
             {
-                //eb.HasMany(i => i.Subcategories)
-                //.WithOne(i => i.Category)
-                //.HasForeignKey(i => i.CategoryId);
+                eb.HasMany(i => i.Subcategories)
+                .WithOne(i => i.Category)
+                .HasForeignKey(i => i.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
 
                 //eb.HasOne(i => i.ImageData)
                 //.WithOne(a => a.Category)
@@ -29,26 +30,22 @@
                 //.HasForeignKey<ImageData>(i => i.CategoryId)
                 //.OnDelete(DeleteBehavior.NoAction);
 
-
             });
 
             modelBuilder.Entity<Subcategory>(eb =>
             {
-                eb.HasOne(i => i.Category)
-                .WithMany(i => i.Subcategories)
-                .IsRequired()
-                .HasForeignKey(i => i.CategoryId).HasPrincipalKey(i => i.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-              
+                //eb.HasOne(i => i.Category)
+                //.WithMany(i => i.Subcategories)
+                //.IsRequired()
+                //.HasForeignKey(i => i.CategoryId)
+                //.OnDelete(DeleteBehavior.Cascade);
 
-                eb.HasOne(i => i.ImageData)
-                .WithOne(i => i.Subcategory)
-                .IsRequired(false)
-                .HasForeignKey<ImageData>(i => i.SubcategoryId)
-                .OnDelete(DeleteBehavior.NoAction);
+                //eb.HasOne(i => i.ImageData)
+                //.WithOne(i => i.Subcategory)
+                //.IsRequired(false)
+                //.HasForeignKey<ImageData>(i => i.SubcategoryId)
+                //.OnDelete(DeleteBehavior.NoAction);
                 
-
-
             });
         }
     }

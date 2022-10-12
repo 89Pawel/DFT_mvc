@@ -23,6 +23,8 @@ builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IAlertService, AlertService>();
 builder.Services.AddTransient<DFT_MVC.Controllers.ImagesController, DFT_MVC.Controllers.ImagesController>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
+builder.Services.AddTransient<ISubcategoryService, SubcategoryService>();
+
 
 
 var app = builder.Build();

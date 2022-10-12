@@ -1,35 +1,31 @@
 ﻿using DFT_MVC.Data;
 using DFT_MVC.Models;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Processing;
-using System.Diagnostics;
 
 namespace DFT_MVC.Services
 {
-    public class CategoryService : ImageService, ICategoryService
-    {
+	public class SubcategoryService : ImageService, ISubcategoryService
+	{
         private const int ImageBigWidth = 480;
         private const int ImageSmallWidth = 150;
 
-        private readonly string tableName = "Categories";
+        private readonly string tableName = "Subcategories";
         private readonly string imageBig = "ImageBig";
         private readonly string imageSmall = "ImageSmall";
 
         private readonly DFT_MVC_Context _dbContext;
+		public int CategoryId { get; set; }
 
-        public CategoryService(IServiceScopeFactory serviceScopeFactory, DFT_MVC_Context dbContext) : base(serviceScopeFactory, dbContext)
+		public SubcategoryService(DFT_MVC_Context dbContext, IServiceScopeFactory serviceScopeFactory) : base(serviceScopeFactory, dbContext)
         {
-            _dbContext = dbContext;
-        }
-
+			_dbContext = dbContext;
+		}
+		public Task<Stream> GetImageBig(string id) => GetImageData(id, imageBig, tableName, _dbContext);
         public Task<Stream> GetImageSmall(string id) => GetImageData(id, imageSmall, tableName, _dbContext);
-        public Task<Stream> GetImageBig(string id) => GetImageData(id, imageBig, tableName, _dbContext);
 
-        public async Task CreateCategory(Category category, IFormFile? image)
-        {
+		public async Task CreateSubcategory(Subcategory subcategory, IFormFile? image)
+		{
             if (image != null)
             {
                 using var imgResult = await GetImageInputResult(image);
@@ -38,9 +34,11 @@ namespace DFT_MVC.Services
                 var ImageBig = await SaveImage(imgResult, ImageBigWidth);
                 var ImageSmall = await SaveImage(imgResult, ImageSmallWidth);
 
-                _dbContext.Categories.Add(new Category
+                _dbContext.Subcategories.Add(new Subcategory
                 {
-                    Name = category.Name,
+                    Name = subcategory.Name,
+                    Description = subcategory.Description,
+                    CategoryId = subcategory.CategoryId,
                     ImageOriginal = original,
                     ImageBig = ImageBig,
                     ImageSmall = ImageSmall,
@@ -48,13 +46,17 @@ namespace DFT_MVC.Services
             }
             else
             {
-                _dbContext.Categories.Add(category);
+                _dbContext.Subcategories.Add(new Subcategory
+                {
+                    Name = subcategory.Name,
+                    Description = subcategory.Description,
+                    CategoryId = subcategory.CategoryId,
+                });
             }
             await _dbContext.SaveChangesAsync();
         }
-
-        public async Task UpdateCategory(Category category, IFormFile? image)
-        {
+		public async Task UpdateSubcategory(Subcategory subcategory, IFormFile? image)
+		{
             if (image != null)
             {
                 using var imgResult = await GetImageInputResult(image);
@@ -63,15 +65,22 @@ namespace DFT_MVC.Services
                 var ImageBig = await SaveImage(imgResult, ImageBigWidth);
                 var ImageSmall = await SaveImage(imgResult, ImageSmallWidth);
 
-                //category.Name = category.Name;
-                category.ImageOriginal = original;
-                category.ImageBig = ImageBig;
-                category.ImageSmall = ImageSmall; 
+                subcategory.ImageOriginal = original;
+                subcategory.ImageBig = ImageBig;
+                subcategory.ImageSmall = ImageSmall;
             }
 
-            _dbContext.Update(category);
+            _dbContext.Update(subcategory);
             await _dbContext.SaveChangesAsync();
         }
+
+		public async Task<int> GetCategoryInfo(int id)
+		{
+			var category = await _dbContext.Categories
+                .FirstOrDefaultAsync(m => m.Id == id);
+			return category!.Id;
+		}
+
 
     }
 }

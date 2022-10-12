@@ -44,9 +44,6 @@ namespace DFT_MVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SubcategoryId")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("ThumbnailBigContent")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
@@ -56,10 +53,6 @@ namespace DFT_MVC.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SubcategoryId")
-                        .IsUnique()
-                        .HasFilter("[SubcategoryId] IS NOT NULL");
 
                     b.ToTable("ImageDatas");
                 });
@@ -110,6 +103,15 @@ namespace DFT_MVC.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("ImageBig")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("ImageOriginal")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("ImageSmall")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -119,16 +121,6 @@ namespace DFT_MVC.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Subcategories");
-                });
-
-            modelBuilder.Entity("DFT_MVC.Data.ImageData", b =>
-                {
-                    b.HasOne("DFT_MVC.Models.Subcategory", "Subcategory")
-                        .WithOne("ImageData")
-                        .HasForeignKey("DFT_MVC.Data.ImageData", "SubcategoryId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Subcategory");
                 });
 
             modelBuilder.Entity("DFT_MVC.Models.Subcategory", b =>
@@ -145,11 +137,6 @@ namespace DFT_MVC.Migrations
             modelBuilder.Entity("DFT_MVC.Models.Category", b =>
                 {
                     b.Navigation("Subcategories");
-                });
-
-            modelBuilder.Entity("DFT_MVC.Models.Subcategory", b =>
-                {
-                    b.Navigation("ImageData");
                 });
 #pragma warning restore 612, 618
         }

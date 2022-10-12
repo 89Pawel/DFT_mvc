@@ -15,9 +15,14 @@ namespace DFT_MVC.Models
         [DataType(DataType.Date)]
         [HiddenInput]
         public DateTime CreationDate { get; set; } = DateTime.Today;
+        public byte[]? ImageOriginal { get; set; } = null;
+        [Display(Name = "Zdjęcie")]
+        public byte[]? ImageBig { get; set; } = null;
+        [Display(Name = "Zdjęcie")]
+        public byte[]? ImageSmall { get; set; } = null;
         public Category? Category { get; set; }
         [Required]
         public int CategoryId { get; set; }
-        public ImageData? ImageData { get; set; }
+        //public ImageData? ImageData { get; set; }
     }
 }

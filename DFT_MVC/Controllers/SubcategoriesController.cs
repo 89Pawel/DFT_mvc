@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using DFT_MVC.Data;
 using DFT_MVC.Models;
 using System.Diagnostics;
+using DFT_MVC.Services;
+using System.Xml.Linq;
 
 namespace DFT_MVC.Controllers
 {
@@ -15,17 +17,27 @@ namespace DFT_MVC.Controllers
     {
         private readonly DFT_MVC_Context _context;
         private readonly ImagesController _imagesController;
+        private readonly ISubcategoryService _subcategoryService;
+        public int TEST { get; set; }
 
-        public SubcategoriesController(DFT_MVC_Context context, ImagesController imagesController)
+        public SubcategoriesController(DFT_MVC_Context context, ImagesController imagesController, ISubcategoryService subcategoryService)
         {
             _context = context;
             _imagesController = imagesController;
+            _subcategoryService = subcategoryService;
         }
 
+        public async Task<IActionResult> ImageSmall(string id) => File(await _subcategoryService.GetImageSmall(id), "image/jpeg");
+        public async Task<IActionResult> ImageBig(string id) => File(await _subcategoryService.GetImageBig(id), "image/jpeg");
+
         // GET: Subcategories
+        [Route("Subcategory/{id}")]
         public async Task<IActionResult> Index(int id)
         {
-            var dFT_MVC_Context = _context.Subcategories!.Include(s => s.Category).Include(i => i.ImageData).Where(i => i.CategoryId == id);
+            var dFT_MVC_Context = _context.Subcategories!.Include(s => s.Category).Where(i => i.CategoryId == id);
+
+            var selectedCategory = await _context.Categories.SingleAsync(i => i.Id == id);
+            ViewData["CategoryId"] = selectedCategory.Id;
             return View(await dFT_MVC_Context.ToListAsync());
         }
 
@@ -49,9 +61,11 @@ namespace DFT_MVC.Controllers
         }
 
         // GET: Subcategories/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            var categoryInfo = _context.Categories.Find(id);
+            ViewData["CategoryId"] = categoryInfo!.Id;
+            ViewData["CategoryName"] = categoryInfo!.Name;
             return View();
         }
 
@@ -60,17 +74,14 @@ namespace DFT_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,CreationDate,CategoryId")] Subcategory subcategory, IFormFile[] images)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,CreationDate,CategoryId")] Subcategory subcategory, IFormFile? image)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(subcategory);
-                await _context.SaveChangesAsync();
-                await _imagesController.Upload(images,subcategoryId: subcategory.Id);
-                Debug.WriteLine("!!!!!!!!!!QQQQQQQQQQQQQQQQQQQQQQQQQQQ!!!!!!!!!!!!!!!!     "+subcategory.CategoryId);
-                return RedirectToAction(nameof(Index),"Subcategories",subcategory.CategoryId);
+                await _subcategoryService.CreateSubcategory(subcategory, image);
+
+                return RedirectToAction(nameof(Index), new { id = subcategory.CategoryId });
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", subcategory.ImageData!.Id);
             return View(subcategory);
         }
 
@@ -87,7 +98,7 @@ namespace DFT_MVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", subcategory.CategoryId);
+            ViewData["CategoryId"] = subcategory.CategoryId;
             return View(subcategory);
         }
 
@@ -96,7 +107,7 @@ namespace DFT_MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,CreationDate,CategoryId")] Subcategory subcategory)
+        public async Task<IActionResult> Edit(int id, [Bind("Id, Name, Description, CreationDate, ImageOriginal, ImageBig, ImageSmall, CategoryId")] Subcategory subcategory, IFormFile? image)
         {
             if (id != subcategory.Id)
             {
@@ -107,12 +118,11 @@ namespace DFT_MVC.Controllers
             {
                 try
                 {
-                    _context.Update(subcategory);
-                    await _context.SaveChangesAsync();
+                    await _subcategoryService.UpdateSubcategory(subcategory!, image);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SubcategoryExists(subcategory.Id))
+                    if (!SubcategoryExists(subcategory!.Id))
                     {
                         return NotFound();
                     }
@@ -121,9 +131,8 @@ namespace DFT_MVC.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = subcategory!.CategoryId });
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", subcategory.CategoryId);
             return View(subcategory);
         }
 
@@ -155,14 +164,14 @@ namespace DFT_MVC.Controllers
             {
                 return Problem("Entity set 'DFT_MVC_Context.Subcategories'  is null.");
             }
-            var subcategory = await _context.Subcategories.Include(i => i.ImageData).SingleAsync(i => i.Id == id);
+            var subcategory = await _context.Subcategories.SingleAsync(i => i.Id == id);
             if (subcategory != null)
             {
                 _context.Subcategories.Remove(subcategory);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { id = subcategory!.CategoryId });
         }
 
         private bool SubcategoryExists(int id)

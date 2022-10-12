@@ -21,12 +21,27 @@ div.image::before {
 }
 
 img {
-    /*width: 100px;
+    width: 100px;
     height: 60px;
-    object-fit: cover;*/
+    object-fit: cover;
 }
 
 td {
     height: 70px;
     vertical-align:middle;
+}
+
+.rightAligment{
+    text-align: right;
+}
+.container {
+    width: auto;
+}
+
+.align-left {
+    float: left;
+}
+
+.align-right {
+    float: right;
 }

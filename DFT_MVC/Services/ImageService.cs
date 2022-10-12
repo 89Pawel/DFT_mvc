@@ -121,5 +121,17 @@
 
             return result;
         }
+
+        public async Task<Image> GetImageInputResult(IFormFile? image)
+        {
+            var imageInput = new ImageInput
+            {
+                Name = image!.Name,
+                Type = image.ContentType,
+                Content = image.OpenReadStream(),
+            };
+            var imgResult = await Image.LoadAsync(imageInput!.Content);
+            return imgResult;
+        }
     }
 }

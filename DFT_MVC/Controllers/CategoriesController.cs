@@ -20,16 +20,14 @@
         private readonly DFT_MVC_Context _context;
         //private readonly IDisplayFromDBService _displayFromDBService;
         private readonly IAlertService _alertService;
-        private readonly ImagesController _imagesController;
         private readonly ICategoryService _categoryService;
 
-        public CategoriesController(DFT_MVC_Context context, IImageService imageService, IAlertService alertService, ImagesController imagesController, ICategoryService categoryService)
+        public CategoriesController(DFT_MVC_Context context, IImageService imageService, IAlertService alertService, ICategoryService categoryService)
         {
             _context = context;
             _imageService = imageService;
             //_displayFromDBService = displayFromDBService;
             _alertService = alertService;
-            _imagesController = imagesController;
             _categoryService = categoryService;
         }
         public async Task<IActionResult> ImageSmall(string id) => File(await _categoryService.GetImageSmall(id), "image/jpeg");
@@ -47,6 +45,15 @@
             var categories = await _context.Categories.Include(i => i.Subcategories).ToListAsync();
             //await _displayFromDBService.GetDataDict();
             return View(categories);
+        }
+        public async Task<IActionResult> Index1(int? id)
+        {
+            var category = await _context.Categories
+                .FirstOrDefaultAsync(m => m.Id == id);
+            //var categories = await _context.Categories.Include(i => i.ImageData).Include(i => i.Subcategories).ToListAsync();
+            var categories = await _context.Categories.Include(i => i.Subcategories).ToListAsync();
+            //await _displayFromDBService.GetDataDict();
+            return RedirectToAction(nameof(Index), "Subcategories", new { id = category!.Id });
         }
 
         // GET: Categories/Details/5
