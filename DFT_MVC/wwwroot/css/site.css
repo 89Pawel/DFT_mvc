@@ -16,18 +16,28 @@ html {
 body {
   margin-bottom: 60px;
 }
+
 div.image::before {
     content: url(https://a.allegroimg.com/s1024/0c41d9/2f5916ad479f909b56fb3b9ea585);
 }
 
 img {
-    width: 100px;
-    height: 60px;
+/*    width: 100px;
+    height: 60px;*/
     object-fit: cover;
+    max-width: 100%;
+    height: auto;
+}
+.listImage {
+    width: 100px;
+    min-height: 70px;
+    object-fit: cover;
+    max-width: 100%;
+    height: auto;
 }
 
 td {
-    height: 70px;
+    max-height: 70px;
     vertical-align:middle;
 }
 

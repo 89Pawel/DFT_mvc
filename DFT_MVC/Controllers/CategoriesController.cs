@@ -138,7 +138,7 @@
             {
                 try
                 {
-                    await _categoryService.UpdateCategory(category, image);
+                    await _categoryService.UpdateCategory(id, image);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

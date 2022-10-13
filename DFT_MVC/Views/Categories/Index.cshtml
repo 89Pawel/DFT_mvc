@@ -5,8 +5,10 @@
 	ViewData["Title"] = "Index";
 	var alertList = TempData["ResultMessage"] as IEnumerable<string>;
 }
-<link rel="stylesheet" href="css/site.css">
-<link rel="stylesheet" href="css/alertMsg.css">
+<link rel="stylesheet" href="~/css/site.css">
+<link rel="stylesheet" href="~/css/alertMsg.css">
+<link rel="stylesheet" href="~/css/w3.css">
+
 
 
 <h1>Lista Kategorii</h1>
@@ -73,19 +75,18 @@
 					
 				</td>
 				<td>
-@*					@if (item.ImageData != null)
-					{
-						<img src="/Images/ThumbnailSmall/@item.ImageData.Id">
-					}*@
+					<div>
 					@if (item.ImageOriginal != null)
 					{
-						<img src="/Categories/ImageSmall/@item.Id">
+							<img class="w3-round-large listImage" src="/Categories/ImageSmall/@item.Id">
 						
 					}
 					else
 					{
-						<img src="~/images/no_image.png">
+							<img class="w3-round-large listImage" src="~/images/no_image.png">
 					}
+
+					</div>
 				</td>
 				<td>
 					<a asp-controller="Categories" asp-action="Index1" asp-route-id="@item.Id">

@@ -5,8 +5,7 @@ namespace DFT_MVC.Services
 	public interface ISubcategoryService
 	{
         Task CreateSubcategory(Subcategory subcategory, IFormFile? image);
-        Task UpdateSubcategory(Subcategory subcategory, IFormFile? image);
-        Task<int> GetCategoryInfo(int id);
+        Task UpdateSubcategory(int subcategoryId, IFormFile? image);
         Task<Stream> GetImageSmall(string id);
         Task<Stream> GetImageBig(string id);
     }

@@ -55,8 +55,10 @@ namespace DFT_MVC.Services
             }
             await _dbContext.SaveChangesAsync();
         }
-		public async Task UpdateSubcategory(Subcategory subcategory, IFormFile? image)
+		public async Task UpdateSubcategory(int subcategoryId, IFormFile? image)
 		{
+            var subcategory = _dbContext.Subcategories.Single(i => i.Id == subcategoryId);
+
             if (image != null)
             {
                 using var imgResult = await GetImageInputResult(image);
@@ -74,12 +76,6 @@ namespace DFT_MVC.Services
             await _dbContext.SaveChangesAsync();
         }
 
-		public async Task<int> GetCategoryInfo(int id)
-		{
-			var category = await _dbContext.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-			return category!.Id;
-		}
 
 
     }

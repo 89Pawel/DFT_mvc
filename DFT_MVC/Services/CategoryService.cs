@@ -53,8 +53,10 @@ namespace DFT_MVC.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateCategory(Category category, IFormFile? image)
+        public async Task UpdateCategory(int categoryId, IFormFile? image)
         {
+            var category = _dbContext.Categories.Single(i => i.Id == categoryId);
+
             if (image != null)
             {
                 using var imgResult = await GetImageInputResult(image);
