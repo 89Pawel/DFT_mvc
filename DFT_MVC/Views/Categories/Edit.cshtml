@@ -3,10 +3,10 @@
 @{
 	ViewData["Title"] = "Edit";
 }
-<link rel="stylesheet" href="~/css/w3.css">
+<link rel="stylesheet" href="~/css/site.css">
 <link rel="stylesheet" href="~/css/w3.css">
 
-<h1>Edit</h1>
+<h1>Edytuj</h1>
 
 <h4>Kategorie</h4>
 
@@ -37,7 +37,7 @@
 					}
 					else
 					{
-						<img id="output" class="w3-round-large" src="~/images/no_image.png">
+						<img id="output" class="w3-round-large" src="/images/no_image.png">
 					}
 
 				</div>
@@ -82,10 +82,10 @@
 	<div class="container" style="padding-top:10px">
 
 		<div class="align-left">
-			<input type="submit" value="Save" class="btn btn-primary"/>
+			<input type="submit" value="Zapisz" class="btn btn-primary btn-standard"/>
 		</div>
 		<div class="align-right">
-			<a class="btn btn-danger" asp-action="Index">Back to List</a>
+			<a class="btn btn-danger btn-standard" asp-action="Index">Wróć</a>
 		</div>
 	</div>
 </form>

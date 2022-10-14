@@ -7,7 +7,7 @@ namespace DFT_MVC.Services
 {
 	public class SubcategoryService : ImageService, ISubcategoryService
 	{
-        private const int ImageBigWidth = 480;
+        private const int ImageBigWidth = 640;
         private const int ImageSmallWidth = 150;
 
         private readonly string tableName = "Subcategories";
@@ -55,9 +55,12 @@ namespace DFT_MVC.Services
             }
             await _dbContext.SaveChangesAsync();
         }
-		public async Task UpdateSubcategory(int subcategoryId, IFormFile? image)
+		public async Task UpdateSubcategory(Subcategory inputSubcategory, IFormFile? image)
 		{
-            var subcategory = _dbContext.Subcategories.Single(i => i.Id == subcategoryId);
+            var subcategory = _dbContext.Subcategories.Single(i => i.Id == inputSubcategory.Id);
+
+            subcategory.Name = inputSubcategory.Name;
+            subcategory.Description = inputSubcategory.Description;
 
             if (image != null)
             {
@@ -69,7 +72,7 @@ namespace DFT_MVC.Services
 
                 subcategory.ImageOriginal = original;
                 subcategory.ImageBig = ImageBig;
-                subcategory.ImageSmall = ImageSmall;
+                subcategory.ImageSmall = ImageSmall;          
             }
 
             _dbContext.Update(subcategory);

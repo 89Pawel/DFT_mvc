@@ -52,15 +52,15 @@
 
 <p class="container">
 	<div class="align-left">
-		<a class="btn btn-success" asp-action="Create">Create New</a>
+		<a class="btn btn-success" asp-action="Create">Dodaj Kategorię</a>
 	</div>
 </p>
 <table class="table">
 	<thead>
 		<tr>
 			<th>Nazwa</th>
-			<th>Zdjęcie</th>
-			<th>Data utworzenia</th>
+			<th class="centerAligment">Zdjęcie</th>
+			<th class="centerAligment">Liczba podkategorii</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -72,32 +72,28 @@
 					<a asp-controller="Subcategories" asp-action="Index" asp-route-id="@item.Id">
 						@Html.DisplayFor(modelItem => item.Name)
 					</a>
-					
 				</td>
-				<td>
+				<td align="center">
 					<div>
-					@if (item.ImageOriginal != null)
-					{
+						@if (item.ImageOriginal != null)
+						{
 							<img class="w3-round-large listImage" src="/Categories/ImageSmall/@item.Id">
-						
-					}
-					else
-					{
-							<img class="w3-round-large listImage" src="~/images/no_image.png">
-					}
+
+						}
+						else
+						{
+							<img class="w3-round-large listImage" src="/images/no_image.png">
+						}
 
 					</div>
 				</td>
-				<td>
-					<a asp-controller="Categories" asp-action="Index1" asp-route-id="@item.Id">
-					@Html.DisplayFor(modelItem => item.CreationDate)
-
-					</a>
+				<td align="center">
+					@item.Subcategories.Count
 				</td>
-				<td>
-					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a>
-					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+				<td align="right">
+					<a class="btn btn-primary btn-standard" asp-action="Edit" asp-route-id="@item.Id">Edytuj</a>
+					<a class="btn btn-info btn-standard" asp-action="Details" asp-route-id="@item.Id">Szczegóły</a>
+					<a class="btn btn-danger btn-standard" asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
 				</td>
 			</tr>
 		}

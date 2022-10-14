@@ -1,36 +1,72 @@
 ﻿@model DFT_MVC.Models.Category
 
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Details";
 }
+<link rel="stylesheet" href="~/css/site.css">
+<link rel="stylesheet" href="~/css/w3.css">
 
-<h1>Details</h1>
 
-<div>
-    <h4>Kategorie</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreationDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreationDate)
-        </dd>
-    </dl>
+
+<h1>Szczegóły</h1>
+
+<div class="container" style="padding-top:10px">
+	<div class="align-right">
+		<a class="btn btn-danger btn-standard" asp-action="Index">Wróć</a>
+	</div>
+	<div class="align-right" style="padding-right:10px">
+		<a class="btn btn-primary btn-standard" asp-action="Edit" asp-route-id="@Model.Id">Edytuj</a>
+	</div>
+
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<h4>Kategorie</h4>
+<hr />
+<div class="row">
+	<div class="col">
+		<dl class="row">
+			<dt class="col-sm-2 dt-width30" @*style="background-color:magenta*@">
+				@Html.DisplayNameFor(model => model.Name)
+			</dt>
+			<dd class="col-sm-10 dd-width-auto">
+				@Html.DisplayFor(model => model.Name)
+			</dd>
+			<dt class="col-sm-2 dt-width30">
+				@Html.DisplayNameFor(model => model.CreationDate)
+			</dt>
+			<dd class="col-sm-10 dd-width-auto">
+				@Html.DisplayFor(model => model.CreationDate)
+			</dd>
+			<dt class="col-sm-2 dt-width30">
+				<label>Liczba podkategorii (@Model.Subcategories.Count) -></label>
+			</dt>
+			<dd class="col-sm-10 dd-width-auto">
+				@foreach (var item in Model.Subcategories)
+				{
+				<div style="padding-bottom:5px">
+					@Html.ActionLink(@item.Name, "Details", "Subcategories", new {id = @item.Id}, new { @class = "btn btn-outline-primary", @style = "width:100%" })
+				</div>
+				}
+			</dd>
+		</dl>
+	</div>
+	<div class="col">
+		<div class="container w3-center">
+		</div>
+		<div class="w3-display-container">
+			<div class="w3-center">
+				@if (Model.ImageOriginal != null)
+				{
+				<img id="output" class="w3-round-large" src="/Categories/ImageBig/@Model.Id">
+
+				}
+				else
+				{
+				<img id="output" class="w3-round-large" src="/images/no_image.png">
+				}
+
+			</div>
+		</div>
+	</div>
 </div>
+

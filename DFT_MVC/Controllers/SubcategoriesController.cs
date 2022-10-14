@@ -118,7 +118,7 @@ namespace DFT_MVC.Controllers
             {
                 try
                 {
-                    await _subcategoryService.UpdateSubcategory(id, image);
+                    await _subcategoryService.UpdateSubcategory(subcategory, image);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

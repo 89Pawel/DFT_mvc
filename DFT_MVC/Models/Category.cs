@@ -11,7 +11,7 @@
         public int Id { get; set; }
         [Required]
         public string? Name { get; set; }
-
+        [Display(Name = "Utworzono")]
         [DataType(DataType.Date)]
         [HiddenInput]
         public DateTime CreationDate {get; set; } = DateTime.Today;

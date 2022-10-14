@@ -11,7 +11,7 @@ namespace DFT_MVC.Services
 {
     public class CategoryService : ImageService, ICategoryService
     {
-        private const int ImageBigWidth = 480;
+        private const int ImageBigWidth = 640;
         private const int ImageSmallWidth = 150;
 
         private readonly string tableName = "Categories";
@@ -53,9 +53,11 @@ namespace DFT_MVC.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateCategory(int categoryId, IFormFile? image)
+        public async Task UpdateCategory(Category inputCategory, IFormFile? image)
         {
-            var category = _dbContext.Categories.Single(i => i.Id == categoryId);
+            var category = _dbContext.Categories.Single(i => i.Id == inputCategory.Id);
+
+            category.Name = inputCategory.Name;
 
             if (image != null)
             {
@@ -65,7 +67,6 @@ namespace DFT_MVC.Services
                 var ImageBig = await SaveImage(imgResult, ImageBigWidth);
                 var ImageSmall = await SaveImage(imgResult, ImageSmallWidth);
 
-                //category.Name = category.Name;
                 category.ImageOriginal = original;
                 category.ImageBig = ImageBig;
                 category.ImageSmall = ImageSmall; 

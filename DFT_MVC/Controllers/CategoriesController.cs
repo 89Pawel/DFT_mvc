@@ -64,7 +64,7 @@
                 return NotFound();
             }
 
-            var category = await _context.Categories
+            var category = await _context.Categories.Include(i => i.Subcategories)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
@@ -119,6 +119,7 @@
             {
                 return NotFound();
             }
+            ViewData["Category"] = category;
             return View(category);
         }
 
@@ -138,7 +139,7 @@
             {
                 try
                 {
-                    await _categoryService.UpdateCategory(id, image);
+                    await _categoryService.UpdateCategory(category, image);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
