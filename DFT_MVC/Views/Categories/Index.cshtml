@@ -3,99 +3,139 @@
 
 @{
 	ViewData["Title"] = "Index";
-	var alertList = TempData["ResultMessage"] as IEnumerable<string>;
+	var action = TempData["action"];
+	var name = TempData["name"];
 }
 <link rel="stylesheet" href="~/css/site.css">
-<link rel="stylesheet" href="~/css/alertMsg.css">
 <link rel="stylesheet" href="~/css/w3.css">
+<link rel="stylesheet" href="~/css/CategoryCards.css">
 
+<h1 style="text-align:center; font-weight:bold">Lista Kategorii</h1>
 
-
-<h1>Lista Kategorii</h1>
-
-@if (alertList != null)
+@if (action != null)
 {
-	var delete = "#D0342C"; // czerwony
-	var create = "#53D02C"; // zielony
-	var update = "#2C82D0"; // niebieski
-	var color = string.Empty;
-
-	foreach (var alert in alertList!)
+	if (action.ToString() == "create")
 	{
-		if (alert.EndsWith("1"))
-		{
-			color = create;
-		}
-		else if (alert.EndsWith("2"))
-		{
-			color = update;
-		}
-		else if (alert.EndsWith("3"))
-		{
-			color = delete;
-		}
+		<div class="alert success">
+			<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+			Dodano kategorię @name
+		</div>
+	}
+	else if (action.ToString() == "edit")
+	{
+		<div class="alert warning">
+			<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+			Dokonano edycji kategorii @name
+		</div>
+	}
+	else if (action.ToString() == "delete")
+	{
+		<div class="alert">
+			<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+			Usunięto kategorię @name
+		</div>
 	}
 
-	<div class="alert">
-		<style>
-			.alert {
-				background-color: @color; /* green */
-			}
-		</style>
-		<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-		@foreach (var item in alertList!)
-		{
-			<a>@item.Remove(item.Length - 1)</a>
-		}
-	</div>
 }
 
-<p class="container">
-	<div class="align-left">
-		<a class="btn btn-success" asp-action="Create">Dodaj Kategorię</a>
-	</div>
-</p>
-<table class="table">
-	<thead>
-		<tr>
-			<th>Nazwa</th>
-			<th class="centerAligment">Zdjęcie</th>
-			<th class="centerAligment">Liczba podkategorii</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
+<div class="w3-container">
+
+	<p>
+		<a class="btn btn-retro" asp-action="Create">Dodaj Kategorię</a>
+	</p>
+</div>
+
+<body>
+	<div class="cards">
+
 		@foreach (var item in Model)
 		{
-			<tr>
-				<td>
-					<a asp-controller="Subcategories" asp-action="Index" asp-route-id="@item.Id">
-						@Html.DisplayFor(modelItem => item.Name)
-					</a>
-				</td>
-				<td align="center">
-					<div>
-						@if (item.ImageOriginal != null)
-						{
-							<img class="w3-round-large listImage" src="/Categories/ImageSmall/@item.Id">
-
-						}
-						else
-						{
-							<img class="w3-round-large listImage" src="/images/no_image.png">
-						}
-
+			<div class="card" id="test">
+				<a class="button image-container" asp-controller="Subcategories" asp-action="Index" asp-route-id="@item.Id">
+					@if (item.ImageOriginal != null)
+					{
+						<img class="card__image" src="/Categories/ImageBig/@item.Id" alt="Avatar">
+					}
+					else
+					{
+						<img class="card__image" src="/images/no_image.png" alt="Avatar">
+					}
+					<div class="container">
+						<div class="card-name">
+							<b>
+								@Html.DisplayFor(modelItem => item.Name)
+							</b>
+						</div>
 					</div>
-				</td>
-				<td align="center">
-					@item.Subcategories.Count
-				</td>
-				<td align="right">
-					<a class="btn btn-primary btn-standard" asp-action="Edit" asp-route-id="@item.Id">Edytuj</a>
-					<a class="btn btn-info btn-standard" asp-action="Details" asp-route-id="@item.Id">Szczegóły</a>
-					<a class="btn btn-danger btn-standard" asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
-				</td>
-			</tr>
+					<div class="top-left">
+						<span class="numberCircle">
+							@if (item.Subcategories.Count > 99)
+							{
+								<b>99+</b>
+							}
+							@item.Subcategories.Count
+						</span>
+					</div>
+				</a>
+
+				<div tabindex="0" class="dropdown dropup bottom-right" id="drop" @*onmouseover="pulseUp(this)" onmouseout="pulseDown(this)" onclick="clickDots(this)" onblur="getDrop(this)"*@>
+					<button class="dropbtn" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="bi bi-three-dots-vertical"></span>
+					</button>
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item del-item" asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+						<a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edytuj</a>
+						<a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">Szczegóły</a>
+					</div>
+				</div>
+			</div>
 		}
-	</tbody>
-</table>
+
+	</div>
+
+@*	<script>
+		var clicked = false;
+
+		function getDrop(element) {
+			element = document.getElementById('drop');
+			element.addEventListener('focusout', (event) => {
+				clicked = false;
+				console.log(element.id + "      ||nie moooooooooooooooooooooooooooooa fokusu");
+			})
+			
+		}
+		function pulseUp(x) {
+			x.style.fontSize = "25px";
+			x.style.bottom = "4px";
+
+		}
+		function clickDots(x) {
+			clicked = true;
+			x.focus();
+			console.log("click");
+			 x.style.fontSize = "25px";
+			x.style.bottom = "4px";
+		}
+		function pulseDown(x) {
+			if(!clicked){
+			x.style.fontSize = "19px";
+			x.style.bottom = "9px";
+			}
+		}
+		function test(x) {
+			if(x.style.fontSize !== "19px"){
+				console.log(x.style.fontSize);
+
+			}else{
+
+				clicked = false;
+				console.log("dupa");
+				x.style.fontSize = "19px";
+				x.style.bottom = "9px";
+			}
+		}
+	</script>*@
+
+</body>
+
+

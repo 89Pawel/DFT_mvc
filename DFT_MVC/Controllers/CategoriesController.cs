@@ -46,15 +46,6 @@
             //await _displayFromDBService.GetDataDict();
             return View(categories);
         }
-        public async Task<IActionResult> Index1(int? id)
-        {
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            //var categories = await _context.Categories.Include(i => i.ImageData).Include(i => i.Subcategories).ToListAsync();
-            var categories = await _context.Categories.Include(i => i.Subcategories).ToListAsync();
-            //await _displayFromDBService.GetDataDict();
-            return RedirectToAction(nameof(Index), "Subcategories", new { id = category!.Id });
-        }
 
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -98,8 +89,10 @@
             if (ModelState.IsValid)
             {
                 await _categoryService.CreateCategory(category, image);
+                TempData["action"] = "create";
+                TempData["name"] = category.Name;
 
-                TempData["ResultMessage"] = _alertService.TempDataAlert(category.Name!, 1);
+                //TempData["ResultMessage"] = _alertService.TempDataAlert(category.Name!, 1);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -153,7 +146,10 @@
                     }
                 }
 
-                TempData["ResultMessage"] = _alertService.TempDataAlert(category.Name!, 2);
+                TempData["action"] = "edit";
+                TempData["name"] = category.Name;
+
+                //TempData["ResultMessage"] = _alertService.TempDataAlert(category.Name!, 2);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -200,7 +196,10 @@
 
             await _context.SaveChangesAsync();
 
-            TempData["ResultMessage"] = _alertService.TempDataAlert(category!.Name!, 3);
+            TempData["action"] = "delete";
+            TempData["name"] = category!.Name;
+
+            //TempData["ResultMessage"] = _alertService.TempDataAlert(category!.Name!, 3);
 
             return RedirectToAction(nameof(Index));
         }
